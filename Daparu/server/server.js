@@ -3,8 +3,18 @@ const app = express();
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+const mongoose = require('mongoose');
+const key = require('./key/key');
 
 // 몽고 디비 연결 코드 추가
+mongoose.connect(key.mongoURI,{
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false
+})
+.then(()=> console.log('MongoDB is connected...'))
+.catch(err => console.log(err));
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
