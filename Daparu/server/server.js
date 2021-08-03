@@ -21,6 +21,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 
+// Connect Routes
+app.use('/api/user', require('./routes/user'));
+
 const port = process.env.PORT || 5000;
 
 app.listen(port, () => {

@@ -1,24 +1,26 @@
-import logo from './logo.svg';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import MainPage from './views/MainPage/MainPage';
+import SignInPage from './views/SignInPage/SignInPage';
+import SignUpPage from './views/SignUpPage/SignUpPage';
 import './App.css';
+import 'antd/dist/antd.css';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
+import rootReducer from './reducers/index';
 
 function App() {
+  const store = createStore(rootReducer);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Provider store={store}>
+      <Router>
+        <Switch>
+          <Route path='/' exact component={MainPage} />
+          <Route path='/signin' exact component={SignInPage} />
+          <Route path='/signup' exact component={SignUpPage} />
+        </Switch>
+      </Router>
+    </Provider>
   );
 }
 
