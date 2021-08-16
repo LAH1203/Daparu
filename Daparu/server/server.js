@@ -23,6 +23,7 @@ app.use(cookieParser());
 
 // Connect Routes
 app.use('/api/user', require('./routes/user'));
+app.use('/api/seller', require('./routes/seller'));
 
 const port = process.env.PORT || 5000;
 

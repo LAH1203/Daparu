@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 
 import user from './user';
+import seller from './seller';
 
 // (이전상태, 액션) => 다음상태
 const rootReducer = combineReducers({
@@ -11,6 +12,7 @@ const rootReducer = combineReducers({
         }
     },
     user,
+    seller,
 });
 
 export default rootReducer;

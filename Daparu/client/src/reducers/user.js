@@ -1,7 +1,7 @@
 export const initialState = {
     isLoggedIn: false,
     me: null,
-    loginData: {},
+    loginData: {}
 };
 
 // action creator

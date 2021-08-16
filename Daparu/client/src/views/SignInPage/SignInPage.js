@@ -3,6 +3,7 @@ import axios from 'axios';
 import Logo from '../Logo';
 import { useDispatch } from 'react-redux';
 import { loginAction } from '../../reducers/user';
+import { registerSellerAction } from '../../reducers/seller';
 
 import { Input, Button } from 'antd';
 import { YuqueOutlined, LockOutlined } from '@ant-design/icons';
@@ -56,11 +57,16 @@ const SignInPage = ({ history }) => {
                     const name = res.data.user.name;
                     alert('로그인 성공');
                     dispatch(loginAction({ email, password, name }));
+                    // 로그인한 사람이 판매자로 등록되어 있을 경우
+                    if (res.data.seller) {
+                        const { number, name, product } = res.data.sellerInfo;
+                        dispatch(registerSellerAction({ number, name, product }));
+                    }
                     history.push('/');
                 } else {
                     alert(res.data.message);
                 }
-            })
+            });
     }
 
     const formStyle = useMemo(() => ({
@@ -92,7 +98,6 @@ const SignInPage = ({ history }) => {
                 {emailCheck && <p style={alertStyle}>이메일 형식에 맞지 않습니다.</p>}
                 {!emailCheck && <br />}
                 <Input.Password style={inputStyle} value={password} onChange={onChangePassword} placeholder="Password" prefix={<LockOutlined />} />
-                <br />
                 {passwordCheck && <p style={alertStyle}>비밀번호는 8자 이상이어야 합니다.</p>}
                 {!passwordCheck && <br />}
                 <Button type="primary" htmlType="submit" style={buttonStyle}>로그인</Button>

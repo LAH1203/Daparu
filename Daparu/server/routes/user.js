@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const { User } = require('../models/User');
+const { Seller } = require('../models/Seller');
 
 // Sign In
 router.post('/signin', (req, res) => {
@@ -25,9 +26,23 @@ router.post('/signin', (req, res) => {
                 });
             }
 
-            res.status(200).json({
-                success: true,
-                user: user,
+            // 해당 사용자가 판매자로 등록되어 있는지 확인
+            Seller.findOne({ email: email }, (err, seller) => {
+                // 해당 이메일의 판매자 존재유무를 알림
+                if (seller) {
+                    res.status(200).json({
+                        success: true,
+                        user: user,
+                        seller: true,
+                        sellerInfo: seller,
+                    });
+                } else {
+                    res.status(200).json({
+                        success: true,
+                        user: user,
+                        seller: false,
+                    });
+                }
             });
         });
     });
@@ -48,6 +63,36 @@ router.post('/signup', (req, res) => {
 
         return res.status(200).json({
             success: true
+        });
+    });
+});
+
+// Remove
+router.post('/remove', (req, res) => {
+    const { email } = req.body;
+
+    // 탈퇴 시 해당 이메일의 회원 정보와 판매자 정보 모두 삭제해야 함
+    User.deleteOne({ email: email }, (err) => {
+        if (err) {
+            console.log(err);
+            return res.json({
+                success: false,
+                err
+            });
+        }
+
+        Seller.deleteOne({ email: email }, (err) => {
+            if (err) {
+                console.log(err);
+                return res.json({
+                    success: false,
+                    err
+                });
+            }
+
+            return res.status(200).json({
+                success: true
+            });
         });
     });
 });
