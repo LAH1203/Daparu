@@ -24,6 +24,9 @@ app.use(cookieParser());
 // Connect Routes
 app.use('/api/user', require('./routes/user'));
 app.use('/api/seller', require('./routes/seller'));
+app.use('/api/product', require('./routes/product'));
+
+app.use('/upload', express.static('upload'));
 
 const port = process.env.PORT || 5000;
 
