@@ -47,4 +47,62 @@ router.post('/uploads', (req, res) => {
 })
 
 
+router.post('/products', (req, res) => {
+    const { searchText, category } = req.body;
+
+    console.log(searchText, category);
+
+    // 검색어가 있을 경우
+    if (searchText) {
+        if (category) {
+            Product.find({ title: { $regex: searchText } })
+                .find({ category: category })
+                .exec((err, productInfo) => {
+                    if (err) {
+                        return res.status(400).json({ success: false, err });
+                    }
+                    else {
+                      return res.status(200).json({ success: true, productInfo });
+                    }
+                });
+        } else {
+            Product.find({ title: { $regex: searchText } })
+                .exec((err, productInfo) => {
+                    if (err) {
+                        return res.status(400).json({ success: false, err });
+                    }
+                    else {
+                      return res.status(200).json({ success: true, productInfo });
+                    }
+                });
+        }
+    }
+    // 검색어가 없을 경우
+    else {
+        if (category) {
+            Product.find({ category: category })
+                .exec((err, productInfo) => {
+                    if (err) {
+                        console.log(err);
+                        return res.status(400).json({ success: false, err });
+                    }
+                    else {
+                        return res.status(200).json({ success: true, productInfo });
+                    }
+                });
+        } else {
+            Product.find()
+                .exec((err, productInfo) => {
+                    if (err) {
+                        console.log(err);
+                        return res.status(400).json({ success: false, err });
+                    }
+                    else {
+                        return res.status(200).json({ success: true, productInfo });
+                    }
+                });
+        }
+    }
+});
+
 module.exports = router;
