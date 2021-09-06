@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const { Seller } = require('../models/Seller');
+const { Product } = require('../models/Product');
 
 // Register Seller
 router.post('/register', (req, res) => {
@@ -44,7 +45,7 @@ router.post('/register', (req, res) => {
 
 // Remove Seller
 router.post('/remove', (req, res) => {
-    const { email } = req.body;
+    const { email, number } = req.body;
 
     Seller.deleteOne({ email: email }, (err) => {
         if (err) {
@@ -55,8 +56,19 @@ router.post('/remove', (req, res) => {
             });
         }
 
-        return res.status(200).json({
-            success: true
+        // 해당 판매자의 물건도 모두 삭제
+        Product.deleteMany({ writer: number }, (err) => {
+            if (err) {
+                console.log(err);
+                return res.json({
+                    success: false,
+                    err
+                });
+            }
+
+            return res.status(200).json({
+                success: true
+            });
         });
     });
 });

@@ -3,6 +3,7 @@ const router = express.Router();
 
 const { User } = require('../models/User');
 const { Seller } = require('../models/Seller');
+const { Product } = require('../models/Product');
 
 // Sign In
 router.post('/signin', (req, res) => {
@@ -30,11 +31,15 @@ router.post('/signin', (req, res) => {
             Seller.findOne({ email: email }, (err, seller) => {
                 // 해당 이메일의 판매자 존재유무를 알림
                 if (seller) {
-                    res.status(200).json({
-                        success: true,
-                        user: user,
-                        seller: true,
-                        sellerInfo: seller,
+                    // 해당 사용자가 판매자라면 등록된 판매 상품 검색
+                    Product.find({ writer: seller.number }, (err, product) => {
+                        res.status(200).json({
+                            success: true,
+                            user: user,
+                            seller: true,
+                            sellerInfo: seller,
+                            product: product,
+                        });
                     });
                 } else {
                     res.status(200).json({

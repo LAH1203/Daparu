@@ -59,7 +59,8 @@ const SignInPage = ({ history }) => {
                     dispatch(loginAction({ email, password, name }));
                     // 로그인한 사람이 판매자로 등록되어 있을 경우
                     if (res.data.seller) {
-                        const { number, name, product } = res.data.sellerInfo;
+                        const { number, name } = res.data.sellerInfo;
+                        const product = res.data.product;
                         dispatch(registerSellerAction({ number, name, product }));
                     }
                     history.push('/');
