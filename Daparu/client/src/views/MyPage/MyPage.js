@@ -108,7 +108,6 @@ const MyPage = ({ history }) => {
                     <h2>판매자 정보</h2>
                     <div><b style={{ marginRight: '5px' }}>사업자 등록 번호</b>|| {number}</div>
                     <div><b style={{ marginRight: '5px' }}>상호명</b>|| {name}</div>
-
                     <table>
                         <tr>
                             <td>상품명</td>
@@ -133,7 +132,6 @@ const MyPage = ({ history }) => {
                         })}
                     </table>
                     <Button onClick={() => history.push('/uploads')}>판매 물품 등록</Button>
-
                     <Button type="primary" danger onClick={onClickRemoveSellerButton}>판매자 해지</Button>
                 </div>
             }
