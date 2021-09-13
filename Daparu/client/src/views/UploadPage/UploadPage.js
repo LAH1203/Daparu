@@ -4,15 +4,28 @@ import { useSelector } from "react-redux";
 import Logo from '../Logo';
 
 import FileUpload from '../../utils/FileUpload';
-import { Input, Button,} from 'antd';
+import { Input, Button, } from 'antd';
 
 const { TextArea } = Input;
+
+const Categories = [
+  '의류',
+  '뷰티',
+  '식품',
+  '생활',
+  '반려동물',
+  '홈인테리어',
+  '가전/디지털',
+  '취미',
+  '문구/오피스',
+]
 
 const UploadPage = ({ history }) => {
   const { number } = useSelector(state => state.seller);
   const [Title, setTitle] = useState(''); //상품명
   const [Images, setImages] = useState([]); //상품이미지
   const [Description, setDescription] = useState('')//상품 설명
+  const [Category, setCategory] = useState('의류')
   const [Price, setPrice] = useState(0)//가격
   const [Stock, setStock] = useState(0)//재고
   const [SellerInfo, setSellerInfo] = useState('')//옾카링크/전번
@@ -29,25 +42,30 @@ const UploadPage = ({ history }) => {
     setPrice(e.target.value);
   }, []);
 
+  const onChangeCategory = useCallback((e) => {
+    setCategory(e.target.value);
+  }, []);
+
   const onChangeStock = useCallback((e) => {
     setStock(e.target.value);
   }, [])
 
-  const onChangeSellerInfo = useCallback((e)=>{
+  const onChangeSellerInfo = useCallback((e) => {
     setSellerInfo(e.target.value);
-  })
+  }, [])
 
   const updateImages = (newImages) => {
     setImages(newImages)
   }
 
+
   const submitHandler = (e) => {
     e.preventDefault();
 
-    console.log('submit')
+
 
     //빠진 값이 있을 경우
-    if (!Title || !Description || !Price || !Stock || Images.length === 0) {//이미지 길이 추가 해야 함
+    if (!Title || !Description || !Category || !Price || !Stock || Images.length === 0) {
       return alert("모든 값을 넣어주셔야 합니다.")
     }
 
@@ -57,6 +75,7 @@ const UploadPage = ({ history }) => {
       images: Images,
       title: Title,
       description: Description,
+      category: Category,
       price: Price,
       stock: Stock,
       sellerInfo: SellerInfo,
@@ -67,10 +86,10 @@ const UploadPage = ({ history }) => {
     axios.post("http://localhost:5000/api/product/uploads", body)
       .then(response => {
         if (response.data.success) {
-          alert('상품 업로드에 성공 했습니다.')
+          alert('상품 업로드에 성공했습니다.')
           history.push('/mypage')
         } else {
-          alert('상품 업로드에 실패 했습니다.')
+          alert('상품 업로드에 실패했습니다.')
         }
       })
 
@@ -106,6 +125,15 @@ const UploadPage = ({ history }) => {
         <br />
         <label>설명</label>
         <TextArea onChange={onChangeDescription} value={Description} />
+        <br />
+        <br />
+        <label>카테고리</label>
+        <br />
+        <select onChange={onChangeCategory} value={Category} >
+          {Categories.map(item => (
+            <option>{item}</option>
+          ))}
+        </select>
         <br />
         <br />
         <label>가격</label>

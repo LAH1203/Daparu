@@ -36,6 +36,10 @@ const productSchema = mongoose.Schema({
     default: 0
   },
 
+  category:{
+    type: String
+},
+
   sellerInfo: {
     type: String,
   },

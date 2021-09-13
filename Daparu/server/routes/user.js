@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-
 const { User } = require('../models/User');
 const { Seller } = require('../models/Seller');
 
@@ -16,7 +15,7 @@ router.post('/signin', (req, res) => {
                 message: '해당 이메일의 사용자가 존재하지 않습니다.',
             });
         }
-        
+
         user.comparePassword(password, (err, isMatch) => {
             // 비밀번호가 일치하지 않는 경우
             if (!isMatch) {
@@ -95,6 +94,63 @@ router.post('/remove', (req, res) => {
             });
         });
     });
+});
+
+// Add to Cart
+router.post('/addToCart', (req, res) => {
+    console.log('전달')
+
+    const { email, productId } = req.body;
+
+    //유저 정보를 가져오고
+    User.findOne({ email: email }, (err, user) => {
+
+        //카트에 넣으려는 상품이 이미 있는지 확인
+        let duplicate = false;
+        user.cart.forEach((item) => {
+            if (item.id === productId) {
+                duplicate = true;
+            }
+        })
+
+        if (duplicate) {
+            User.findOneAndUpdate(    //이미 있으면 
+                { email: email, "cart.id": productId },
+                { $inc: { "cart.$.quantity": 1 } },
+                { new: true },
+                (err, user) => {
+                    if (err) return res.status(200).json({ success: false, err })
+                    res.status(200).send(user.cart)
+                    console.log('카트 저장 성공')
+                }
+            )
+        } else {  //상품이 없으면
+            User.findOneAndUpdate(
+                { email: email },
+                {
+                    $push: {
+                        cart: {
+                            id: productId,
+                            quantity: 1,
+                            date: Date.now()
+                        }
+                    }
+                },
+                { new: true },
+                (err, user) => {
+                    if (err) return res.status(400).json({ success: false, err })
+                    res.status(200).send(user.cart)
+                    console.log('카트 저장 성공')
+                }
+            )
+        }
+
+
+
+    })
+
+
+
 });
 
 module.exports = router;

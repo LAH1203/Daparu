@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const saltRound = 10;
 
 const userSchema = mongoose.Schema({
@@ -12,7 +13,12 @@ const userSchema = mongoose.Schema({
     },
     name: {
         type: String,
-    }
+    },
+    cart: {
+        type:Array,
+        default:[]
+    },
+
 });
 
 userSchema.pre('save', function (next) {
@@ -37,6 +43,7 @@ userSchema.methods.comparePassword = function (plainPassword, cb) {
         cb(null, isMatch);
     });
 }
+
 
 const User = mongoose.model('User', userSchema);
 

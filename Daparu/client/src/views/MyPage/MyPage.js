@@ -92,7 +92,7 @@ const MyPage = ({ history }) => {
                             </div>
                         );
                     })}
-                    <Button onClick={() => history.push('/uploads')}>판매 물품 등록</Button>
+                    <Button onClick={() => history.push('/upload')}>판매 물품 등록</Button>
                     <Button type="primary" danger onClick={onClickRemoveSellerButton}>판매자 해지</Button>
                 </div>
             }

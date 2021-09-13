@@ -13,7 +13,7 @@ const sellerSchema = mongoose.Schema({
     product: {
         type: Array,
         default: []
-    }
+    },
 });
 
 const Seller = mongoose.model('Seller', sellerSchema);

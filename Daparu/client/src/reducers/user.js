@@ -1,7 +1,10 @@
+import axios from "axios";
+
 export const initialState = {
     isLoggedIn: false,
     me: null,
-    loginData: {}
+    loginData: {},
+    cart: [],
 };
 
 // action creator
@@ -15,6 +18,16 @@ export const loginAction = (data) => {
 export const logoutAction = () => {
     return {
         type: 'LOG_OUT',
+    }
+}
+
+export function addToCart(body){
+    const request = axios.post('http://localhost:5000/api/user/addToCart', body)
+    .then(response => response.data);
+
+    return {
+        type: 'ADD_TO_CART',
+        payload: request
     }
 }
 
@@ -33,6 +46,16 @@ const reducer = (state = initialState, action) => {
                 isLoggedIn: false,
                 me: null,
             };
+
+        case ('ADD_TO_CART', action.payload):
+            return{
+                ...state,
+                userData: {
+                    ...state.userData,
+                    cart: action.payload
+                }
+            }
+
         default:
             return state;
     }

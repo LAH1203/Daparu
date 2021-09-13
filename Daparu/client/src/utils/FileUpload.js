@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import Dropzone from 'react-dropzone';
 import { Button } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
-import Axios from 'axios';
+import axios from 'axios';
 
 function FileUpload(props) {
 
   const [Images, setImages] = useState([]);
+  
 
   const dropHandler = (files) => {
     let formData = new FormData();
@@ -18,22 +19,20 @@ function FileUpload(props) {
 
     formData.append("file", files[0])
 
-    Axios.post('http://localhost:5000/api/product/image', formData, config)
+    axios.post('http://localhost:5000/api/product/images', formData, config)
       .then(response => {
         if (response.data.success) {
           setImages([...Images, response.data.filePath])
           props.refreshFunction([...Images, response.data.filePath])
-          //console.log(response.data.filePath)
-          //console.log(response.data)
+          console.log(response.data)
           alert('이미지 저장')
         } else {
           alert('이미지 저장 실패')
 
         }
-      })
-
-
+      })    
   }
+
 
 
   const sampleHandler = (image) => {//한 번 클릭으로 썸네일 이미지 선택

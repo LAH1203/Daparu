@@ -7,7 +7,7 @@ import ImageSlider from '../../utils/ImageSlider';
 import { Input, Button, Row, Col, Card } from 'antd';
 import Meta from "antd/lib/card/Meta";
 import axios from "axios";
-const { Search }  = Input;
+const { Search } = Input;
 
 const MainPage = ({ history }) => {
     const [searchText, setSearchText] = useState('');
@@ -99,7 +99,7 @@ const MainPage = ({ history }) => {
     const renderCards = product.map((item, idx) => {
         return (
             <Col lg={6} md={8} xs={24} key={idx}>
-                <Card>
+                <Card  onClick={() => { history.push(`/product/${item._id}`) }} >
                     <Meta title={item.title} description={`${item.price}원`} />
                 </Card>
             </Col>
@@ -118,8 +118,8 @@ const MainPage = ({ history }) => {
 
     return (
         <>
-            {!isLoggedIn && <Button style={userButtonStyle} onClick={() => {history.push('/signin')}}>로그인</Button>}
-            {isLoggedIn && <Button style={userButtonStyle} onClick={() => {history.push('/mypage')}}>마이페이지</Button>}
+            {!isLoggedIn && <Button style={userButtonStyle} onClick={() => { history.push('/signin') }}>로그인</Button>}
+            {isLoggedIn && <Button style={userButtonStyle} onClick={() => { history.push('/mypage') }}>마이페이지</Button>}
 
             <br />
             <br />
@@ -142,7 +142,7 @@ const MainPage = ({ history }) => {
                     {renderCards}
                 </Row>
             </center>
-            
+
         </>
     );
 };

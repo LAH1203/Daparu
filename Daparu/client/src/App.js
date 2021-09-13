@@ -25,8 +25,8 @@ function App() {
           <Route path='/signup' exact component={SignUpPage} />
           <Route path='/mypage' exact component={MyPage} />
           <Route path='/registerSeller' exact component={RegisterSellerPage} />
-          <Route path='/uploads' exact component={UploadPage} />
-          <Route path='/detail' exact component={DetailPage} />
+          <Route path='/upload' exact component={UploadPage} />
+          <Route path='/product/:productId' exact component={DetailPage} />
           <Route path='/reviewTable' exact component={ReviewTablePage} />
         </Switch>
       </Router>

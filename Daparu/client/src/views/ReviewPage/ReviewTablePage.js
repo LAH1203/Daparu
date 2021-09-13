@@ -3,8 +3,6 @@ import { Table, Tag, Space } from 'antd';
 
 const { Column, ColumnGroup } = Table;
 
-//리뷰 작성을 따로 컴포넌트를 만들고, 리뷰 게시글 페이지도 따로 만들 것.
-
 function ReviewTablePage() {
 
   //테스트 데이터
@@ -71,8 +69,6 @@ function ReviewTablePage() {
         />
       </Table>
 
-      {/*게시글 작성란 */}
-      {/*별점 주기 */}
     </div>
   )
 }

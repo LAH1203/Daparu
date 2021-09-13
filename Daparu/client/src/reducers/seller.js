@@ -1,5 +1,3 @@
-import axios from "axios";
-
 export const initialState = {
     number: null,
     name: null,
