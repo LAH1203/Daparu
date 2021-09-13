@@ -16,6 +16,13 @@ export const logoutSellerAction = (data) => {
     return {
         type: 'LOGOUT_SELLER',
     }
+};
+
+export const reloadProductAction = (data) => {
+    return {
+        type: 'RELOAD_PRODUCT',
+        data,
+    }
 }
 
 const reducer = (state = initialState, action) => {
@@ -36,6 +43,12 @@ const reducer = (state = initialState, action) => {
                 name: null,
                 product: [],
             };
+        case 'RELOAD_PRODUCT':
+            console.log("RELOAD_PRODUCT ACTION", action.data);
+            return {
+                ...state,
+                product: action.data.product,
+            }
         default:
             return state;
     }
