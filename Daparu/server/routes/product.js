@@ -144,18 +144,4 @@ router.post('/remove', (req, res) => {
   });
 });
 
-router.post('/remove', (req, res) => {
-  const { id, number } = req.body;
-  Product.deleteOne({ _id: id }, (err) => {
-    if (err) {
-      console.log(err);
-      return res.status(400).json({ success: false, err });
-    } else {
-      Product.find({ writer: number }, (err, product) => {
-        return res.status(200).json({ success: true, product: product });
-      });
-    }
-  });
-});
-
 module.exports = router;

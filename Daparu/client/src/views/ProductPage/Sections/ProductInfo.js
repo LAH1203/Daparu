@@ -1,9 +1,6 @@
 import React from 'react'
 import { Button, Descriptions } from 'antd'
-import { useDispatch } from 'react-redux';
 
-import { addToCart } from '../../../reducers/user'
-import axios from 'axios';
 
 function ProductInfo({detail}) {
  
