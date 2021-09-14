@@ -121,7 +121,7 @@ const MyPage = ({ history }) => {
                                 <tr>
                                     <td>{p.title}</td>
                                     <td>{p.price}</td>
-                                    <td>{p.price}</td>
+                                    <td>{p.stock}</td>
                                     <td>{p.sold}</td>
                                     <td>
                                         <Button onClick={() => history.push(`/uploads?id=${p._id}`)}>수정</Button>

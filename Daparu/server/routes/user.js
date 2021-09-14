@@ -105,7 +105,7 @@ router.post('/remove', (req, res) => {
 router.post('/addToCart', (req, res) => {
     console.log('전달')
 
-    const { email, productId } = req.body;
+    const { email, productId, product } = req.body;
 
     //유저 정보를 가져오고
     User.findOne({ email: email }, (err, user) => {
@@ -137,7 +137,8 @@ router.post('/addToCart', (req, res) => {
                         cart: {
                             id: productId,
                             quantity: 1,
-                            date: Date.now()
+                            date: Date.now(),
+                            product: product,
                         }
                     }
                 },

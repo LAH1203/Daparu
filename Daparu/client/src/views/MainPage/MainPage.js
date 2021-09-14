@@ -1,10 +1,10 @@
 import React, { useState, useMemo, useEffect } from "react";
-import Logo from "../Logo";
 import { useSelector } from "react-redux";
 
 import ImageSlider from '../../utils/ImageSlider';
 
 import { Input, Button, Row, Col, Card } from 'antd';
+import { ShoppingCartOutlined } from '@ant-design/icons';
 import Meta from "antd/lib/card/Meta";
 import axios from "axios";
 const { Search } = Input;
@@ -106,6 +106,10 @@ const MainPage = ({ history }) => {
         );
     });
 
+    const cartButtonStyle = useMemo(() => ({
+        marginTop: '20px',
+        marginLeft: 'auto',
+    }), []);
     const userButtonStyle = useMemo(() => ({
         float: 'right',
         marginTop: '20px',
@@ -118,11 +122,27 @@ const MainPage = ({ history }) => {
 
     return (
         <>
-            {!isLoggedIn && <Button style={userButtonStyle} onClick={() => { history.push('/signin') }}>로그인</Button>}
-            {isLoggedIn && <Button style={userButtonStyle} onClick={() => { history.push('/mypage') }}>마이페이지</Button>}
+            {!isLoggedIn && 
+                <Button 
+                    style={userButtonStyle} 
+                    onClick={() => { history.push('/signin') }}
+                >로그인</Button>
+            }
+            {isLoggedIn && 
+                <div style={{ display: 'flex' }}>
+                    <Button 
+                        style={cartButtonStyle}
+                        onClick={() => { history.push('/cart') }}
+                    >
+                        <ShoppingCartOutlined />
+                    </Button>
+                    <Button
+                        style={userButtonStyle} 
+                        onClick={() => { history.push('/mypage') }}
+                    >마이페이지</Button>
+                </div>
+            }
 
-            <br />
-            <br />
             <br />
 
             <center>
