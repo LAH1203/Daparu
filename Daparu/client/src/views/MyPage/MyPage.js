@@ -124,7 +124,7 @@ const MyPage = ({ history }) => {
                                     <td>{p.stock}</td>
                                     <td>{p.sold}</td>
                                     <td>
-                                        <Button onClick={() => history.push(`/uploads?id=${p._id}`)}>수정</Button>
+                                        <Button onClick={() => history.push(`/uploads/${p._id}`)}>수정</Button>
                                         <Button value={p._id} onClick={onClickDeleteProductButton}>삭제</Button>
                                     </td>
                                 </tr>

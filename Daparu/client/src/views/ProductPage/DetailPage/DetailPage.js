@@ -6,12 +6,15 @@ import ReviewTablePage from '../../ReviewPage/ReviewTablePage';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart } from '../../../reducers/user'
 import { Button, Row, Col } from 'antd';
+import ReviewUpload from '../../ReviewPage/ReviewUpload';
+import onClickDeleteProductButton from '../../MyPage/MyPage';
 
 
 //상품 id에 따른 기본적인 설명 레이아웃 만들기
 //sections에서 상세 설명 만들고 불러오기(상품 이미지, 상품 설명)
 //별점은 평균값을 상품 기본 설명에 추가할 것
 function DetailPage(props) {
+
 
   const productId = props.match.params.productId
   const { number } = useSelector(state => state.seller);
@@ -39,6 +42,14 @@ function DetailPage(props) {
     }
 
     dispatch(addToCart(body))
+
+    let result = window.confirm("장바구니에 상품이 추가되었습니다. 장바구니로 이동하시겠습니까?")
+
+    if (result) {
+      props.history.push('/cart');
+    }else{
+      props.history.push('/');
+    }
   }
 
   return (
@@ -57,15 +68,15 @@ function DetailPage(props) {
 
       </Row>
 
-      
+
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         {/*카트 버튼 */}
-        {!isLoggedIn && <Button  onClick={() => { props.history.push(`/signin`) }}> Add to Cart </Button>}
+        {!isLoggedIn && <Button onClick={() => { props.history.push(`/signin`) }}> Add to Cart </Button>}
         {isLoggedIn && <Button onClick={clickHandler}> Add to Cart</Button>}
 
         {/*수정/삭제 버튼 */}
-        {number === Product.writer && <Button >수정</Button>}
-        {number === Product.writer && <Button >삭제</Button>}
+        {number === Product.writer && <Button onClick={() => props.history.push(`/uploads/${productId}`)}>수정</Button>}
+        {number === Product.writer && <Button value={productId} onClick={onClickDeleteProductButton}>삭제</Button>}
       </div>
 
       <Row lg={12} sm={24}>
@@ -80,6 +91,10 @@ function DetailPage(props) {
       <ReviewTablePage />
 
       {/*리뷰 작성란 */}
+      <br />
+      <br />
+      <label>리뷰 작성란</label>
+      <ReviewUpload detail={Product} />
 
       {/*QnA 게시판 = 판매자 문의 정보란 */}
 

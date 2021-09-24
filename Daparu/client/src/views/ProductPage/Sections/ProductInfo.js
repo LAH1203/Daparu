@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Descriptions } from 'antd'
+import { Descriptions } from 'antd'
 
 
 function ProductInfo({detail}) {

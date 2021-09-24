@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import axios from 'axios';
 import { useSelector } from "react-redux";
 import Logo from '../Logo';
@@ -20,7 +20,9 @@ const Categories = [
   '문구/오피스',
 ]
 
-const UploadPage = ({ history }) => {
+const UploadPage = (props) => {
+
+  const productId = props.match.params.productId
   const { number } = useSelector(state => state.seller);
   const [Title, setTitle] = useState(''); //상품명
   const [Images, setImages] = useState([]); //상품이미지
@@ -58,10 +60,31 @@ const UploadPage = ({ history }) => {
     setImages(newImages)
   }
 
+  
+    useEffect(() => {
+      if(productId){
+      axios.get(`http://localhost:5000/api/product/products_by_id?id=${productId}&type=single`)
+        .then(response => {
+          let product = response.data.productInfo[0]
+          console.log(product)
+    
+          setTitle(product.title)
+          setDescription(product.description)
+          setPrice(product.price)
+          setCategory(product.category)
+          setStock(product.stock)
+          setSellerInfo(product.sellerInfo)
+          setImages(product.images)
+        })
+        .catch(err => alert(err))
+      }
+  
+    }, [])
+  
+
 
   const submitHandler = (e) => {
     e.preventDefault();
-
 
 
     //빠진 값이 있을 경우
@@ -87,9 +110,45 @@ const UploadPage = ({ history }) => {
       .then(response => {
         if (response.data.success) {
           alert('상품 업로드에 성공했습니다.')
-          history.push('/mypage')
+          props.history.push('/mypage')
         } else {
           alert('상품 업로드에 실패했습니다.')
+        }
+      })
+
+  };
+
+  const updateHandler = (e) => {
+    e.preventDefault();
+
+    //빠진 값이 있을 경우
+    if (!Title || !Description || !Category || !Price || !Stock || Images.length === 0) {
+      return alert("모든 값을 넣어주셔야 합니다.")
+    }
+
+    //Product에 들어갈 바디
+    const body = {
+      productId: productId,
+      writer: number,
+      images: Images,
+      title: Title,
+      description: Description,
+      category: Category,
+      price: Price,
+      stock: Stock,
+      sellerInfo: SellerInfo,
+    }
+
+    //console.log(body);
+
+    axios.post("http://localhost:5000/api/product/update", body)
+      .then(response => {
+        if (response.data.success) {
+          alert('상품 수정에 성공했습니다.')
+          //console.log(response.data.productInfo)
+          props.history.push('/mypage')
+        } else {
+          alert('상품 수정에 실패했습니다.')
         }
       })
 
@@ -104,10 +163,15 @@ const UploadPage = ({ history }) => {
     <div style={{ maxWidth: '700px', margin: '2rem auto' }}>
       <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
         <Logo width="200px" />
-        <h2>상품 업로드</h2>
+        <h2>{productId
+          ? '상품 수정'
+          : '상품 등록'}</h2>
       </div>
 
-      <form onSubmit={submitHandler}>
+      <form onSubmit={
+        productId
+          ? updateHandler
+          : submitHandler}>
         {/*썸네일 이미지 선택*/}
         <label>썸네일 이미지</label>
         <br />

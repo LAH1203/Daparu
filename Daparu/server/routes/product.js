@@ -7,10 +7,10 @@ const { Product } = require('../models/Product');
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {//어디에 파일이 저장되는지
-      cb(null, 'upload/')
+    cb(null, 'upload/')
   },
   filename: function (req, file, cb) {
-      cb(null, `${Date.now()}_${file.originalname}`)//파일을 저장할 때 어떤 이름으로 저장할건지
+    cb(null, `${Date.now()}_${file.originalname}`)//파일을 저장할 때 어떤 이름으로 저장할건지
   }
 })
 
@@ -32,10 +32,9 @@ router.post('/images', (req, res) => {
 })
 
 
-
+//상품 업로드
 router.post('/uploads', (req, res) => {
 
-  //상품 업로드 정보 저장
   const product = new Product(req.body)
 
   product.save((err) => {
@@ -46,6 +45,43 @@ router.post('/uploads', (req, res) => {
     return res.status(200).json({ success: true })
   })
 
+})
+
+//상품 수정
+//왜 안되지 엉엉엉
+router.post('/update', (req, res) => {
+
+  //console.log(req.body)
+  const {
+    productId,
+    title,
+    images,
+    description,
+    price,
+    stock,
+    category,
+    sellerInfo } = req.body;
+
+  //상품 아이디와 같은 상품 찾고
+  //그 정보를 다시 업데이트하기
+  Product.findOneAndUpdate({ _id: productId },
+    {
+      $set: {
+        "title": title,
+        "images": images,
+        "description": description,
+        "price": price,
+        "stock": stock,
+        "category": category,
+        "sellerInfo": sellerInfo
+      }
+    },
+    { new: true },
+    (err, productInfo) => {
+      //console.log(productInfo)
+      if (err) return res.status(400).json({ success: false, err })
+      return res.status(200).json({ success: true, productInfo })
+    })
 })
 
 
