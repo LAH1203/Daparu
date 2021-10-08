@@ -5,7 +5,7 @@ import axios from "axios";
 import { Button, Checkbox } from "antd";
 import { CloseOutlined } from '@ant-design/icons';
 import Logo from '../Logo';
-import '../../utils/table.css';
+import './cartTable.css';
 
 const CartPage = ({ history }) => {
     const [cartItems, setCartItems] = useState([]);
@@ -76,25 +76,21 @@ const CartPage = ({ history }) => {
 
     return (
         <center>
-            <Logo width='200px' />
+            <Logo width='300px' />
             <table>
                 <tr>
                     <td></td>
-                    <td>상품명</td>
-                    <td>가격(원)</td>
-                    <td>담은 개수</td>
-                    <td>재고</td>
+                    <td><h3>상품보기</h3></td>
+                    <td><h3>담은 개수</h3></td>
                     <td></td>
                 </tr>
                 {cartItems.map((p, i) => {
                     return (
                         <tr>
                             <td><Checkbox defaultChecked value={p.product.price * p.quantity} onChange={onChangeFunction} /></td>
-                            <td style={{ cursor: 'pointer' }} onClick={() => { history.push(`/product/${p.id}`) }}>{p.product.title}</td>
-                            <td>{p.product.price}</td>
-                            <td>{p.quantity}</td>
-                            <td>{p.product.stock}</td>
-                            <td><Button value={p.id} onClick={deleteItemFunction}><CloseOutlined /></Button></td>
+                            <td onClick={() => { history.push(`/product/${p.id}`) }}><u><h3 style={{ cursor: 'pointer', color: 'blue' }}>상품</h3></u></td>
+                            <td><h3>{p.quantity}</h3></td>
+                            <td><Button value={p.id} style={{ borderColor: 'transparent', border: 'none' }} onClick={deleteItemFunction}><CloseOutlined /></Button></td>
                         </tr>
                     );
                 })}
@@ -102,7 +98,7 @@ const CartPage = ({ history }) => {
 
             <br />
 
-            <div>총 {total} 원</div>
+            <h2>총 {total} 원</h2>
 
             <br />
 
