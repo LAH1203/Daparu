@@ -6,16 +6,22 @@ const { Product } = require('../models/Product');
 const { Review } = require('../models/Review');
 
 
-var storage = multer.diskStorage({
-  destination: function (req, file, cb) {//어디에 파일이 저장되는지
-    cb(null, 'upload/')
-  },
-  filename: function (req, file, cb) {
-    cb(null, `${Date.now()}_${file.originalname}`)//파일을 저장할 때 어떤 이름으로 저장할건지
-  }
-})
+// var storage = multer.diskStorage({
+//   destination: function (req, file, cb) {//어디에 파일이 저장되는지
+//     cb(null, 'upload/')
+//   },
+//   filename: function (req, file, cb) {
+//     cb(null, `${Date.now()}_${file.originalname}`)//파일을 저장할 때 어떤 이름으로 저장할건지
+//   }
+// })
 
-const upload = multer({ storage: storage }).single('file');
+const encode = (data) => {
+  let buffer = Buffer.from(data);
+  let base64 = buffer.toString('base64');
+  return base64;
+};
+
+const upload = multer({ storage: multer.memoryStorage() }).single('file');
 
 
 router.post('/images', (req, res) => {
@@ -26,8 +32,7 @@ router.post('/images', (req, res) => {
     }
     return res.json({
       success: true,
-      filePath: res.req.file.path,
-      filename: res.req.file.filename,
+      fileBuffer: res.req.file.buffer.toString('base64')
     })
   })
 })
@@ -196,4 +201,3 @@ router.post('/review', (req, res) => {
 })
 
 module.exports = router;
-

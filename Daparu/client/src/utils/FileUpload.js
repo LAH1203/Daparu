@@ -22,8 +22,8 @@ function FileUpload(props) {
     axios.post('http://localhost:5000/api/product/images', formData, config)
       .then(response => {
         if (response.data.success) {
-          setImages([...Images, response.data.filePath])
-          props.refreshFunction([...Images, response.data.filePath])
+          setImages([...Images, response.data.fileBuffer])
+          props.refreshFunction([...Images, response.data.fileBuffer])
           console.log(response.data)
           alert('이미지 저장')
         } else {
@@ -75,7 +75,7 @@ const deleteHandler = (image) => {//더블클릭 시 이미지 삭제
         {Images.map((image, index) => (
           <div onClick={()=> sampleHandler(image)} onDoubleClick={()=>deleteHandler(image)} key={index}>
             <img style={{ minWidth: '300px', width: '300px', height: '240px' }}
-              src={`http://localhost:5000/${image}`}
+              src={`data:image/png;base64,${image}`}
             />
           </div>
         ))}
