@@ -1,6 +1,7 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import axios from 'axios';
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { reloadProductAction } from '../../reducers/seller';
 import Logo from '../Logo';
 
 import FileUpload from '../../utils/FileUpload';
@@ -21,6 +22,7 @@ const Categories = [
 ]
 
 const UploadPage = (props) => {
+  const dispatch = useDispatch();
 
   const productId = props.match.params.productId
   const { number } = useSelector(state => state.seller);

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useSelector } from 'react-redux';
 import FileUpload from '../../utils/FileUpload';
 import axios from 'axios';
-import { Button, Form, Input } from 'antd'
+import { Button, Input } from 'antd'
 
 const { TextArea } = Input;
 
@@ -10,16 +10,11 @@ function ReviewUpload({ detail, history }) {
 
   const { me } = useSelector(state => state.user);
 
-
-  const [Title, setTitle] = useState("")
   const [Review, setReview] = useState("")
   const [Star, setStar] = useState(0)
   const [Images, setImages] = useState([])
 
-  const titleChangeHandler = (event) => {
-    setTitle(event.currentTarget.value)
-  }
-
+ 
   const reviewChangeHandler = (event) => {
     setReview(event.currentTarget.value)
   }
@@ -35,28 +30,29 @@ function ReviewUpload({ detail, history }) {
   const submitHandler = (event) => {
     event.preventDefault();
 
-    if (!Title || !Review) {
-      return alert("모든 값을 넣어주셔야 합니다.")
+    if (!Review) {
+      return alert("내용을 넣어주셔야 합니다.")
     }
 
     const body = {
       productId: detail._id,
-      email: me.email,
-      title: Title,
+      writer: me.email,
       review: Review,
       images: Images,
+      star: Star,
     }
 
-    console.log(body);
 
-    axios.post('http://localhost:5000/api/user/review', body)
+
+    axios.post('http://localhost:5000/api/product/review', body)
       .then(response => {
         
         if (response.data.success) {
           alert('리뷰등록')
-          history.push(`/product/${detail._id}`)
+          setImages([])
+          setReview('')
         } else {
-          alert(response.data.message);
+          alert('리뷰등록 실패')
         }
       })
   }
@@ -64,26 +60,20 @@ function ReviewUpload({ detail, history }) {
 
   return (
     <div>
-
-
-      <Form onSubmit={submitHandler}>
+      <form onSubmit={submitHandler}>
         <br />
         <br />
-        <label>제목</label>
-        <Input onChange={titleChangeHandler} value={Title} />
-        <br />
-        <br />
-        <label>내용</label>
+        <label>리뷰</label>
         <TextArea onChange={reviewChangeHandler} value={Review} />
         <br />
         <br />
-        <label>이미지</label>
+        <label>이미지 첨부</label>
         <FileUpload type="Button" refreshFunction={updateImages} icon="UploadOutlined" />
         <br />
-        <Button type="submit">
+        <Button htmlType="submit">
           확인
         </Button>
-      </Form>
+      </form>
     </div>
   )
 }

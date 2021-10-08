@@ -28,7 +28,6 @@ function App() {
           <Route path='/registerSeller' exact component={RegisterSellerPage} />
           <Route path='/uploads' exact component={UploadPage} />
           <Route path='/product/:productId' exact component={DetailPage} />
-          <Route path='/reviewTable' exact component={ReviewTablePage} />
           <Route path='/cart' exact component={CartPage} />
           <Route path='/uploads/:productId' exact component={UploadPage} />
         </Switch>

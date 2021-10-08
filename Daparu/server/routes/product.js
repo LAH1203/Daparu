@@ -3,6 +3,7 @@ const router = express.Router();
 const multer = require('multer');
 
 const { Product } = require('../models/Product');
+const { Review } = require('../models/Review');
 
 
 var storage = multer.diskStorage({
@@ -48,7 +49,6 @@ router.post('/uploads', (req, res) => {
 })
 
 //상품 수정
-//왜 안되지 엉엉엉
 router.post('/update', (req, res) => {
 
   //console.log(req.body)
@@ -180,4 +180,20 @@ router.post('/remove', (req, res) => {
   });
 });
 
+//리뷰 업로드
+router.post('/review', (req, res) => {
+
+  const review = new Review(req.body)
+
+  review.save((err) => {
+    if (err) {
+      console.log('상품저장실패')
+      return res.status(400).json({ success: false, err })
+    }
+    return res.status(200).json({ success: true })
+  })
+
+})
+
 module.exports = router;
+

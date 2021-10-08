@@ -8,7 +8,7 @@ import { addToCart } from '../../../reducers/user'
 import { Button, Row, Col } from 'antd';
 import ReviewUpload from '../../ReviewPage/ReviewUpload';
 import onClickDeleteProductButton from '../../MyPage/MyPage';
-
+import Logo from '../../Logo';
 
 //상품 id에 따른 기본적인 설명 레이아웃 만들기
 //sections에서 상세 설명 만들고 불러오기(상품 이미지, 상품 설명)
@@ -47,7 +47,7 @@ function DetailPage(props) {
 
     if (result) {
       props.history.push('/cart');
-    }else{
+    } else {
       props.history.push('/');
     }
   }
@@ -55,6 +55,7 @@ function DetailPage(props) {
   return (
     <div style={{ width: '100%', padding: '3rem 4rem' }}>
       <div style={{ display: 'flex', justifyContent: 'left' }}>
+        <Logo width="200px" />
         <h1>{Product.title}</h1>
       </div>
 
