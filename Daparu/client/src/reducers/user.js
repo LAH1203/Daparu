@@ -22,7 +22,7 @@ export const logoutAction = () => {
 }
 
 export function addToCart(body){
-    const request = axios.post('http://localhost:5000/api/user/addToCart', body)
+    const request = axios.post('http://localhost:5000/api/cart/add', body)
     .then(response => response.data);
 
     return {
@@ -48,7 +48,7 @@ const reducer = (state = initialState, action) => {
             };
 
         case ('ADD_TO_CART', action.payload):
-            return{
+            return {
                 ...state,
                 userData: {
                     ...state.userData,

@@ -3,6 +3,7 @@ const router = express.Router();
 const { User } = require('../models/User');
 const { Seller } = require('../models/Seller');
 const { Product } = require('../models/Product');
+const { Cart } = require('../models/Cart');
 
 // Sign In
 router.post('/signin', (req, res) => {
@@ -55,6 +56,10 @@ router.post('/signin', (req, res) => {
 // Sign Up
 router.post('/signup', (req, res) => {
     const user = new User(req.body);
+    const cart = new Cart({
+        email: req.body.email,
+        cart: []
+    });
 
     user.save((err, doc) => {
         if (err) {
@@ -65,8 +70,19 @@ router.post('/signup', (req, res) => {
             });
         }
 
-        return res.status(200).json({
-            success: true
+        // 회원가입 시 카트 스키마에도 추가
+        cart.save((err, doc) => {
+            if (err) {
+                console.log(err);
+                return res.json({
+                    success: false,
+                    err
+                });
+            }
+
+            return res.status(200).json({
+                success: true
+            });
         });
     });
 });
@@ -100,65 +116,5 @@ router.post('/remove', (req, res) => {
         });
     });
 });
-
-// Add to Cart
-router.post('/addToCart', (req, res) => {
-    console.log('전달')
-
-    const { email, productId, product } = req.body;
-
-    //유저 정보를 가져오고
-    User.findOne({ email: email }, (err, user) => {
-
-        //카트에 넣으려는 상품이 이미 있는지 확인
-        let duplicate = false;
-        user.cart.forEach((item) => {
-            if (item.id === productId) {
-                duplicate = true;
-            }
-        })
-
-        if (duplicate) {
-            User.findOneAndUpdate(    //이미 있으면 
-                { email: email, "cart.id": productId },
-                { $inc: { "cart.$.quantity": 1 } },
-                { new: true },
-                (err, user) => {
-                    if (err) return res.status(200).json({ success: false, err })
-                    res.status(200).send(user.cart)
-                    console.log('카트 저장 성공')
-                }
-            )
-        } else {  //상품이 없으면
-            User.findOneAndUpdate(
-                { email: email },
-                {
-                    $push: {
-                        cart: {
-                            id: productId,
-                            quantity: 1,
-                            date: Date.now(),
-                            product: product,
-                        }
-                    }
-                },
-                { new: true },
-                (err, user) => {
-                    if (err) return res.status(400).json({ success: false, err })
-                    res.status(200).send(user.cart)
-                    console.log('카트 저장 성공')
-                }
-            )
-        }
-
-
-
-    })
-
-
-
-});
-
-
 
 module.exports = router;

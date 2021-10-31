@@ -38,7 +38,6 @@ function DetailPage(props) {
     const body = {
       email: me.email,
       productId: productId,
-      product: Product,
     }
 
     dispatch(addToCart(body))
