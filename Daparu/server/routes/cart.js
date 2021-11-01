@@ -113,8 +113,8 @@ router.post('/delete', (req, res) => {
             });
         }
 
-        const cart = cart.cart;
-        const newCart = cart.filter((element) => element.id !== id);
+        const c = cart.cart;
+        const newCart = c.filter((element) => element.id !== id);
 
         Cart.findOneAndUpdate(
             { email: email, "cart.id": id },
