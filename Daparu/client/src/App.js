@@ -8,6 +8,7 @@ import UploadPage from './views/UploadPage/UploadPage';
 import DetailPage from './views/ProductPage/DetailPage/DetailPage';
 import ReviewTablePage from './views/ReviewPage/ReviewTablePage';
 import CartPage from './views/CartPage/CartPage';
+import QnAPage from './views/QnAPage/QnAPage';
 import './App.css';
 import 'antd/dist/antd.css';
 import { Provider } from 'react-redux';
@@ -30,6 +31,7 @@ function App() {
           <Route path='/product/:productId' exact component={DetailPage} />
           <Route path='/cart' exact component={CartPage} />
           <Route path='/uploads/:productId' exact component={UploadPage} />
+          <Route path='/qna/:productId' exact component={QnAPage} />
         </Switch>
       </Router>
     </Provider>

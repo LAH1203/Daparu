@@ -97,7 +97,7 @@ function DetailPage(props) {
       <ReviewUpload detail={Product} />
 
       {/*QnA 게시판 = 판매자 문의 정보란 */}
-
+      <Button onClick={() => {props.history.push('/qna/' + productId)}}>Q&A Button</Button>
 
     </div>
   )

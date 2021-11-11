@@ -57,10 +57,10 @@ router.post('/add', (req, res) => {
 });
 
 // Show cart items
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
     const email = req.body.email;
 
-    Cart.findOne({ email: email }, async (err, cart) => {
+    await Cart.findOne({ email: email }, async (err, cart) => {
         if (err) {
             console.log(err);
             return res.json({
@@ -69,36 +69,42 @@ router.post('/', (req, res) => {
             });
         }
 
-
-        // 이 밑의 부분에서 동기화가 필요함..!
-        let newCart = [];
-        
-        cart.cart.forEach(item => {
-            Product.findOne({ _id: item.id }, (err, product) => {
-                if (err) {
-                    console.log(err);
-                    return res.json({
-                        success: false,
-                        err,
-                    });
-                }
-
-                newCart.push({
-                    productInfo: product,
-                    quantity: item.quantity,
-                    date: item.date,
+        const promise = new Promise((resolve, reject) => {
+            const newCart = searchProductInfo(cart);
+            setTimeout(() => resolve(newCart), 1000);
+        })
+            .then(value => {
+                return res.json({
+                    success: true,
+                    cart: value,
                 });
             });
-        });
-
-        console.log(newCart);
-
-        return res.json({
-            success: true,
-            cart: newCart,
-        });
     });
 });
+
+const searchProductInfo = async (cart) => {
+    const newCart = [];
+
+    await cart.cart.forEach(async item => {
+        await Product.findOne({ _id: item.id }, async (err, product) => {
+            if (err) {
+                console.log(err);
+                return res.json({
+                    success: false,
+                    err,
+                });
+            }
+
+            await newCart.push({
+                productInfo: product,
+                quantity: item.quantity,
+                date: item.date,
+            });
+        });
+    });
+
+    return newCart;
+}
 
 // Delete cart item
 router.post('/delete', (req, res) => {

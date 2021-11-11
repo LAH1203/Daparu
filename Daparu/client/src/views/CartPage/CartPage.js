@@ -29,7 +29,8 @@ const CartPage = ({ history }) => {
                     console.log(res.data.cart);
                     let newTotal = 0;
                     for (let i = 0; i < res.data.cart.length; i++) {
-                        newTotal += res.data.cart.productInfo[i].price * res.data.cart.productInfo[i].quantity;
+                        const price = res.data.cart[i].productInfo.price * res.data.cart[i].quantity;
+                        newTotal += price;
                     }
                     setTotal(newTotal);
                 } else {
@@ -80,7 +81,7 @@ const CartPage = ({ history }) => {
             <table>
                 <tr>
                     <td></td>
-                    <td><h3>상품 바로가기</h3></td>
+                    <td><h3>상품</h3></td>
                     <td><h3>담은 개수</h3></td>
                     <td><h3>가격</h3></td>
                     <td></td>
@@ -88,8 +89,8 @@ const CartPage = ({ history }) => {
                 {cartItems.map((p, i) => {
                     return (
                         <tr>
-                            <td><Checkbox defaultChecked value={p.productInfo.price * p.quantity} onChange={onChangeFunction} />{p.productInfo.title}</td>
-                            <td onClick={() => { history.push(`/product/${p.id}`) }}><u><h3 style={{ cursor: 'pointer', color: 'blue' }}>상품</h3></u></td>
+                            <td><Checkbox defaultChecked value={p.productInfo.price * p.quantity} onChange={onChangeFunction} /></td>
+                            <td onClick={() => { history.push(`/product/${p.productInfo._id}`) }}><b style={{ cursor: 'pointer' }}>{p.productInfo.title}</b></td>
                             <td><h3>{p.quantity}</h3></td>
                             <td><h3>{p.productInfo.price * p.quantity}</h3></td>
                             <td><Button value={p.id} style={{ borderColor: 'transparent', border: 'none' }} onClick={deleteItemFunction}><CloseOutlined /></Button></td>
