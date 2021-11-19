@@ -178,7 +178,7 @@ const UploadPage = (props) => {
         <label>썸네일 이미지</label>
         <br />
         <img style={{ width: '100px', height: '100px' }}
-          src={`http://localhost:5000/${Images[0]}`} />
+         src={`data:image/png;base64,${Images[0]}`}/>
         <br />
         <label>이름</label>
         <Input onChange={onChangeTitle} value={Title} />

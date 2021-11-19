@@ -7,7 +7,6 @@ import axios from 'axios';
 function FileUpload(props) {
 
   const [Images, setImages] = useState([]);
-  
 
   const dropHandler = (files) => {
     let formData = new FormData();
@@ -28,7 +27,6 @@ function FileUpload(props) {
           alert('이미지 저장')
         } else {
           alert('이미지 저장 실패')
-
         }
       })    
   }
