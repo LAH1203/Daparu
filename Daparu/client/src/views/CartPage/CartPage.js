@@ -43,6 +43,7 @@ const CartPage = ({ history }) => {
 
     const deleteItemFunction = (e) => {
         if (window.confirm('해당 상품을 삭제하시겠습니까?')) {
+            console.log(e.target.value);
             const body = {
                 id: e.target.value,
                 email: me.email,
@@ -84,24 +85,28 @@ const CartPage = ({ history }) => {
         <center>
             <Logo width='300px' />
             <table>
-                <tr>
-                    <td></td>
-                    <td><h3>상품</h3></td>
-                    <td><h3>담은 개수</h3></td>
-                    <td><h3>가격</h3></td>
-                    <td></td>
-                </tr>
-                {cartItems.map((p, i) => {
-                    return (
-                        <tr>
-                            <td><Checkbox defaultChecked value={p.productInfo.price * p.quantity} onChange={onChangeFunction} /></td>
-                            <td onClick={() => { history.push(`/product/${p.productInfo._id}`) }}><b style={{ cursor: 'pointer' }}>{p.productInfo.title}</b></td>
-                            <td><h3>{p.quantity}</h3></td>
-                            <td><h3>{p.productInfo.price * p.quantity}</h3></td>
-                            <td><Button value={p.id} style={{ borderColor: 'transparent', border: 'none' }} onClick={deleteItemFunction}><CloseOutlined /></Button></td>
-                        </tr>
-                    );
-                })}
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th><h3>상품</h3></th>
+                        <th><h3>담은 개수</h3></th>
+                        <th><h3>가격</h3></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {cartItems.map((p, i) => {
+                        return (
+                            <tr>
+                                <td><Checkbox defaultChecked value={p.productInfo.price * p.quantity} onChange={onChangeFunction} /></td>
+                                <td onClick={() => { history.push(`/product/${p.productInfo._id}`) }}><b style={{ cursor: 'pointer' }}>{p.productInfo.title}</b></td>
+                                <td><h3>{p.quantity}</h3></td>
+                                <td><h3>{p.productInfo.price * p.quantity}</h3></td>
+                                <td><Button value={p.id} style={{ borderColor: 'transparent', border: 'none' }} onClick={deleteItemFunction}><CloseOutlined /></Button></td>
+                            </tr>
+                        );
+                    })}
+                </tbody>
             </table>
 
             <br />

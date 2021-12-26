@@ -34,53 +34,69 @@ router.post('/add', (req, res) => {
         } 
         // 상품이 없는 경우
         else {
-            Cart.findOneAndUpdate(
-                { email: email },
-                {
-                    $push: {
-                        cart: {
-                            id: productId,
-                            quantity: 1,
-                            date: Date.now(),
+            Product.findOne({ _id: productId }, (err, prod) => {
+                Cart.findOneAndUpdate(
+                    { email: email },
+                    {
+                        $push: {
+                            cart: {
+                                id: productId,
+                                productInfo: prod,
+                                quantity: 1,
+                                date: Date.now(),
+                            }
                         }
+                    },
+                    { new: true },
+                    (err, cartSchema) => {
+                        if (err) return res.status(400).json({ success: false, err });
+                        console.log('카트 저장 성공');
+                        res.status(200).send(cart);
                     }
-                },
-                { new: true },
-                (err, cartSchema) => {
-                    if (err) return res.status(400).json({ success: false, err });
-                    console.log('카트 저장 성공');
-                    res.status(200).send(cart);
-                }
-            );
+                );
+            });
         }
     });
 });
 
 // Show cart items
 router.post('/', async (req, res) => {
-    const email = req.body.email;
+    const { email } = req.body;
 
-    await Cart.findOne({ email: email }, async (err, cart) => {
+    Cart.findOne({ email: email }, (err, cart) => {
         if (err) {
             console.log(err);
-            return res.json({
-                success: false,
-                err,
-            });
+            return res.json({ success: false, err });
         }
 
-        const promise = new Promise((resolve, reject) => {
-            const newCart = searchProductInfo(cart);
-            setTimeout(() => resolve(newCart), 1000);
-        })
-            .then(value => {
-                return res.json({
-                    success: true,
-                    cart: value,
-                });
-            });
+        return res.json({ success: true, cart: cart.cart });
     });
 });
+
+// router.post('/', async (req, res) => {
+//     const email = req.body.email;
+
+//     await Cart.findOne({ email: email }, async (err, cart) => {
+//         if (err) {
+//             console.log(err);
+//             return res.json({
+//                 success: false,
+//                 err,
+//             });
+//         }
+
+//         const promise = new Promise((resolve, reject) => {
+//             const newCart = searchProductInfo(cart);
+//             setTimeout(() => resolve(newCart), 1000);
+//         })
+//             .then(value => {
+//                 return res.json({
+//                     success: true,
+//                     cart: value,
+//                 });
+//             });
+//     });
+// });
 
 const searchProductInfo = async (cart) => {
     const newCart = [];
