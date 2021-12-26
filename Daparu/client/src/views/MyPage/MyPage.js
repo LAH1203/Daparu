@@ -109,27 +109,31 @@ const MyPage = ({ history }) => {
                     <div><b style={{ marginRight: '5px' }}>사업자 등록 번호</b>|| {number}</div>
                     <div><b style={{ marginRight: '5px' }}>상호명</b>|| {name}</div>
                     <table>
-                        <tr>
-                            <td>상품명</td>
-                            <td>가격(원)</td>
-                            <td>재고량(개)</td>
-                            <td>판매량(개)</td>
-                            <td></td>
-                        </tr>
-                        {product.map((p, i) => {
-                            return (
-                                <tr>
-                                    <td>{p.title}</td>
-                                    <td>{p.price}</td>
-                                    <td>{p.stock}</td>
-                                    <td>{p.sold}</td>
-                                    <td>
-                                        <Button onClick={() => history.push(`/uploads/${p._id}`)}>수정</Button>
-                                        <Button value={p._id} onClick={onClickDeleteProductButton}>삭제</Button>
-                                    </td>
-                                </tr>
-                            );
-                        })}
+                        <thead>
+                            <tr>
+                                <th>상품명</th>
+                                <th>가격(원)</th>
+                                <th>재고량(개)</th>
+                                <th>판매량(개)</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {product.map((p, i) => {
+                                return (
+                                    <tr>
+                                        <td>{p.title}</td>
+                                        <td>{p.price}</td>
+                                        <td>{p.stock}</td>
+                                        <td>{p.sold}</td>
+                                        <td>
+                                            <Button onClick={() => history.push(`/uploads/${p._id}`)}>수정</Button>
+                                            <Button value={p._id} onClick={onClickDeleteProductButton}>삭제</Button>
+                                        </td>
+                                    </tr>
+                                );
+                            })}
+                        </tbody>
                     </table>
                     <Button onClick={() => history.push('/uploads')}>판매 물품 등록</Button>
                     <Button type="primary" danger onClick={onClickRemoveSellerButton}>판매자 해지</Button>
