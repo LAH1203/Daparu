@@ -31,6 +31,7 @@ export function addToCart(body){
     }
 }
 
+
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case 'LOG_IN':

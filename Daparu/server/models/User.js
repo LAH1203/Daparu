@@ -13,7 +13,7 @@ const userSchema = mongoose.Schema({
     },
     name: {
         type: String,
-    },
+    }
 });
 
 userSchema.pre('save', function (next) {

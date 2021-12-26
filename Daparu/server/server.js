@@ -31,6 +31,7 @@ app.use('/api/seller', require('./routes/seller'));
 app.use('/api/product', require('./routes/product'));
 app.use('/api/cart', require('./routes/cart'));
 app.use('/api/qna', require('./routes/qna'));
+app.use('/api/payment', require('./routes/payment'));
 
 app.use('/upload', express.static('upload'));
 

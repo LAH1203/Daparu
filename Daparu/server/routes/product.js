@@ -192,7 +192,7 @@ router.post('/review', (req, res) => {
 
   review.save((err) => {
     if (err) {
-      console.log('상품저장실패')
+      console.log('리뷰저장실패')
       return res.status(400).json({ success: false, err })
     }
     return res.status(200).json({ success: true })

@@ -6,10 +6,12 @@ import { Button, Checkbox } from "antd";
 import { CloseOutlined } from '@ant-design/icons';
 import Logo from '../Logo';
 import './cartTable.css';
+import PaymentPage from "../PaymentPage/PaymentPage";
 
 const CartPage = ({ history }) => {
     const [cartItems, setCartItems] = useState([]);
     const [total, setTotal] = useState(0);
+    const [ShowPay, setShowPay] = useState(false)
 
     const { me } = useSelector(state => state.user);
 
@@ -71,8 +73,11 @@ const CartPage = ({ history }) => {
             return alert('구매할 상품을 선택해주세요!');
         }
 
-        // 구매 로직 작성
-        // 전달해야 할 것 : 구매 상품 정보
+        else {
+            setShowPay(true)
+        }
+
+  
     };
 
     return (
@@ -105,7 +110,8 @@ const CartPage = ({ history }) => {
 
             <br />
 
-            <Button onClick={onClickPaymentButton}>결제하기</Button>
+            {ShowPay ? <PaymentPage total={total} cartDetail={cartItems}/>
+            : <Button onClick={onClickPaymentButton}>결제하기</Button>}
         </center>
     );
 };
