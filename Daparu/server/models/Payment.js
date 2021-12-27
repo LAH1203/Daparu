@@ -3,16 +3,13 @@ const mongoose = require('mongoose');
 const paymentSchema = mongoose.Schema({
 
   user: {
-    type: Array,
-    default : []
+    type: String,
   },
   data:{
-    type: Array,
-    default : []
+    type: Object,
   },
   product:{
-    type: Array,
-    default : []
+    type: Object,
   }
 
 }, { timestamps: true })

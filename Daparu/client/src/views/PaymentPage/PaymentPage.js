@@ -6,7 +6,7 @@ import PopupDom from '../../utils/Address/PopupDom';
 import Paypal from '../../utils/Paypal';
 
 
-import { Input, Button, } from 'antd';
+import { Input, Button } from 'antd';
 import Kakao from '../../utils/Kakao/Kakao';
 
 // 페이팔 아이디 : sb-offjw6957667@personal.example.com
@@ -62,12 +62,44 @@ function PaymentPage({ total, cartDetail }) {
     //console.log(zonecode)
   };
 
+  //console.log(cartDetail)
 
+  const submitHandler = (e) => {
+    e.preventDefault();
 
-  const transactionSuccess = (data) => {
-    setFullAddress(Address+" "+DetailAddress)
-    console.log(FullAddress)
-  }
+    //빠진 값이 있을 경우
+    if (!Name || !Number || !Address || !DetailAddress || !Zonecode) {
+      return alert("모든 값을 넣어주셔야 합니다.")
+    }
+
+    //Product에 들어갈 바디
+    const body = {
+      user: me.email,
+      data: {
+        name: Name,
+        number: Number,
+        address: Address + " " + DetailAddress,
+        zonecode: Zonecode
+      },
+      product: {
+        productInfo : cartDetail,
+        price : total
+      }
+    }
+
+    console.log(body);
+
+    axios.post("http://localhost:5000/api/payment/successBuy", body)
+      .then(response => {
+        if (response.data.success) {
+          alert('상품 구매에 성공했습니다.')
+        } else {
+          alert('상품 구매에 실패했습니다.')
+        }
+      })
+
+  };
+
 
   const formStyle = useMemo(() => ({
     flexDirection: 'column',
@@ -88,7 +120,7 @@ function PaymentPage({ total, cartDetail }) {
         <h2>결제 정보 입력</h2>
       </div>
 
-      <form style={formStyle}>
+      <form style={formStyle} onSubmit={submitHandler}>
         {/*썸네일 이미지 선택*/}
 
         <br />
@@ -101,7 +133,7 @@ function PaymentPage({ total, cartDetail }) {
         <br />
         <label>주소: <Input value={Address} style={addressStyle} placeholder="주소" /></label>
         <br />
-        <label>상세주소: <Input onChange={onChangeDetailAddress} style={addressStyle} placeholder="상세주소" value={DetailAddress}/></label>
+        <label>상세주소: <Input onChange={onChangeDetailAddress} style={addressStyle} placeholder="상세주소" value={DetailAddress} /></label>
 
         <div id='popupDom'>
           {PopOpen && (
@@ -112,12 +144,15 @@ function PaymentPage({ total, cartDetail }) {
         </div>
         <br />
 
-       <Kakao total={total} />
+        <Kakao total={total} />
 
         {Boolean(total) && <Paypal
           total={total}
-          onSuccess={transactionSuccess}
         />}
+
+        <Button htmlType="submit">
+          구매
+        </Button>
 
 
 

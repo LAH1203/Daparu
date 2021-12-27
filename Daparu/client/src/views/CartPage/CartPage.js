@@ -12,6 +12,7 @@ const CartPage = ({ history }) => {
     const [cartItems, setCartItems] = useState([]);
     const [total, setTotal] = useState(0);
     const [ShowPay, setShowPay] = useState(false)
+    const [checkedItems, setcheckedItems] = useState([]);
 
     const { me } = useSelector(state => state.user);
 
@@ -28,6 +29,7 @@ const CartPage = ({ history }) => {
             .then(res => {
                 if (res.data.success) {
                     setCartItems(res.data.cart);
+                    setcheckedItems(res.data.cart);
                     console.log(res.data.cart);
                     let newTotal = 0;
                     for (let i = 0; i < res.data.cart.length; i++) {
@@ -62,11 +64,18 @@ const CartPage = ({ history }) => {
     };
 
     const onChangeFunction = (e) => {
+        const product = e.target.value;
+        const price = product.productInfo.price * product.quantity;
+
         if (e.target.checked) {
-            setTotal(total + e.target.value);
+            setTotal(total + price);
+            setcheckedItems([...checkedItems, product])
         } else {
-            setTotal(total - e.target.value);
+            setTotal(total - price);
+            setcheckedItems(checkedItems.filter(items => items.id !== product.productInfo._id))
         }
+
+
     };
 
     const onClickPaymentButton = () => {
@@ -98,7 +107,7 @@ const CartPage = ({ history }) => {
                     {cartItems.map((p, i) => {
                         return (
                             <tr>
-                                <td><Checkbox defaultChecked value={p.productInfo.price * p.quantity} onChange={onChangeFunction} /></td>
+                                <td><Checkbox defaultChecked value={p} onChange={onChangeFunction} /></td>
                                 <td onClick={() => { history.push(`/product/${p.productInfo._id}`) }}><b style={{ cursor: 'pointer' }}>{p.productInfo.title}</b></td>
                                 <td><h3>{p.quantity}</h3></td>
                                 <td><h3>{p.productInfo.price * p.quantity}</h3></td>
@@ -115,7 +124,7 @@ const CartPage = ({ history }) => {
 
             <br />
 
-            {ShowPay ? <PaymentPage total={total} cartDetail={cartItems}/>
+            {ShowPay ? <PaymentPage total={total} cartDetail={checkedItems}/>
             : <Button onClick={onClickPaymentButton}>결제하기</Button>}
         </center>
     );
