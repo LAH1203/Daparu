@@ -1,17 +1,13 @@
-import React, { useState, useEffect } from 'react'
-import { Image } from 'antd'
-function ProductImage(props) {
+import React, { useState } from 'react';
 
-  const [Images, setImages] = useState([])
-
-
-
+const ProductImage = () => {
+  const [Images, setImages] = useState([]);
 
   return (
     <div>
       Image
     </div>
-  )
-}
+  );
+};
 
-export default ProductImage
+export default ProductImage;

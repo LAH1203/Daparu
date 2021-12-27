@@ -1,12 +1,13 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { useSelector } from "react-redux";
-
-import ImageSlider from '../../utils/ImageSlider';
-
+import axios from "axios";
 import { Input, Button, Row, Col, Card } from 'antd';
 import { ShoppingCartOutlined } from '@ant-design/icons';
 import Meta from "antd/lib/card/Meta";
-import axios from "axios";
+
+import ImageSlider from '../../utils/ImageSlider';
+import { ALERT_MSG, API_ADDRESS, BANNER_IMAGES, CATEGORIES } from "../../utils/constants";
+
 const { Search } = Input;
 
 const MainPage = ({ history }) => {
@@ -16,52 +17,34 @@ const MainPage = ({ history }) => {
 
     const { isLoggedIn } = useSelector(state => state.user);
 
-    // 임시 이미지
-    const images = [
-        "upload/1629864100536_루루애오.jfif",
-        "upload/1629864075511_logo_title.png"
-    ];
-    const categories = [
-        '의류',
-        '뷰티',
-        '식품',
-        '생활',
-        '반려동물',
-        '홈인테리어',
-        '가전/디지털',
-        '취미',
-        '문구/오피스'
-    ];
-
-    useEffect(() => {
-        let body = {
-            searchText: '',
-            category: '',
-        };
-
-        getProducts(body);
-    }, []);
-
-    useEffect(() => {
+    const search = () => {
         let body = {
             searchText: searchText,
             category: category,
         };
-
         getProducts(body);
+    };
+
+    // 검색 필터 X (초기 상태)
+    useEffect(() => {
+        search();
+    }, []);
+
+    // 검색 필터 O
+    // 필터가 설정될 때마다 실행
+    useEffect(() => {
+        search();
     }, [searchText, category]);
 
-    const getProducts = (body) => {
+    const getProducts = body => {
         console.log('getProducts 실행');
 
-        axios.post('http://localhost:5000/api/product/products', body)
+        axios.post(API_ADDRESS + '/product/products', body)
             .then(res => {
-                console.log(res.data);
                 if (res.data.success) {
-                    //setProduct([...product, ...res.data.productInfo]);
                     setProduct(res.data.productInfo);
                 } else {
-                    alert('상품 정보를 가져오는데 실패하였습니다.');
+                    alert(ALERT_MSG.failLoadProducts);
                 }
             });
     };
@@ -70,29 +53,14 @@ const MainPage = ({ history }) => {
         setSearchText('');
         setCategory('');
 
-        const body = {
-            searchText: '',
-            category: '',
-        };
-        getProducts(body);
-
-        history.push('/');
+        search();
     };
 
-    const onChangeSearch = (e) => {
+    const onChangeSearch = e => {
         setSearchText(e.target.value);
     };
 
-    const onSearch = () => {
-        const body = {
-            searchText: searchText,
-            category: category
-        };
-
-        getProducts(body);
-    };
-
-    const selectCategory = (e) => {
+    const selectCategory = e => {
         setCategory(e.target.innerText);
     };
 
@@ -110,14 +78,39 @@ const MainPage = ({ history }) => {
         marginTop: '20px',
         marginLeft: 'auto',
     }), []);
+
     const userButtonStyle = useMemo(() => ({
         float: 'right',
         marginTop: '20px',
-        marginRight: '5%'
+        marginRight: '5%',
     }), []);
+
+    const logoStyle = useMemo(() => ({
+        cursor: 'pointer',
+        marginLeft: '10px',
+        marginRight: '10px',
+    }), []);
+
+    const searchArea = useMemo(() => ({
+        display: 'flex',
+        width: '80%',
+    }), []);
+
     const searchStyle = useMemo(() => ({
         marginBottom: '10px',
-        flex: '1'
+        flex: '1',
+    }), []);
+
+    const categoryArea = useMemo(() => ({
+        display: 'flex',
+        width: '80%',
+        marginTop: '20px',
+        marginBottom: '20px',
+    }), []);
+
+    const categoryStyle = useMemo(() => ({
+        flex: '1',
+        cursor: 'pointer',
     }), []);
 
     return (
@@ -146,14 +139,14 @@ const MainPage = ({ history }) => {
             <br />
 
             <center>
-                <div style={{ display: 'flex', width: '80%' }}>
-                    <h2 style={{ cursor: 'pointer', marginLeft: '10px', marginRight: '10px' }} onClick={onClickLogo}>Daparu</h2>
-                    <Search value={searchText} onChange={onChangeSearch} placeholder="검색어를 입력하세요" onSearch={onSearch} style={searchStyle} enterButton></Search>
+                <div style={searchArea}>
+                    <h2 style={logoStyle} onClick={onClickLogo}>Daparu</h2>
+                    <Search value={searchText} onChange={onChangeSearch} placeholder="검색어를 입력하세요" onSearch={search} style={searchStyle} enterButton></Search>
                 </div>
-                <ImageSlider images={images} />
-                <div style={{ display: 'flex', width: '80%', marginTop: '20px', marginBottom: '20px' }}>
-                    {categories.map((cate, idx) => (
-                        <div key={idx} style={{ flex: '1', cursor: 'pointer' }} onClick={selectCategory}><b>{cate}</b></div>
+                <ImageSlider images={BANNER_IMAGES} />
+                <div style={categoryArea}>
+                    {CATEGORIES.map((nowCategory, idx) => (
+                        <div key={idx} style={categoryStyle} onClick={selectCategory}><b>{nowCategory}</b></div>
                     ))}
                 </div>
 

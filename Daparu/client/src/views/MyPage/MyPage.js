@@ -1,13 +1,13 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import axios from 'axios';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { Button } from 'antd';
+
 import { logoutAction } from '../../reducers/user';
 import { registerSellerAction, logoutSellerAction } from '../../reducers/seller';
-import { useSelector } from "react-redux";
-
-import { Button } from 'antd';
-import '../../utils/table.css';
+import { ALERT_MSG, API_ADDRESS } from '../../utils/constants';
 import Logo from '../Logo';
+import '../../utils/table.css';
 
 const MyPage = ({ history }) => {
     const dispatch = useDispatch();
@@ -18,29 +18,29 @@ const MyPage = ({ history }) => {
         if (window.confirm('로그아웃하시겠습니까?')) {
             dispatch(logoutAction());
             dispatch(logoutSellerAction());
-            alert('로그아웃 성공');
             history.push('/');
         }
     }, []);
+
     const onClickRemoveUserButton = useCallback(() => {
         if (window.confirm('탈퇴하시겠습니까?')) {
             const body = {
                 email: me.email
             };
 
-            axios.post('http://localhost:5000/api/user/remove', body)
+            axios.post(API_ADDRESS + '/user/remove', body)
                 .then(res => {
                     if (res.data.success) {
                         dispatch(logoutAction());
                         dispatch(logoutSellerAction());
-                        alert('탈퇴 성공');
                         history.push('/');
                     } else {
-                        alert('탈퇴 실패');
+                        alert(ALERT_MSG.failDeleteUser);
                     }
                 });
         }
     }, []);
+
     const onClickRemoveSellerButton = useCallback(() => {
         if (window.confirm('판매자 정보를 삭제하시겠습니까?')) {
             const body = {
@@ -48,19 +48,19 @@ const MyPage = ({ history }) => {
                 number: number,
             };
 
-            axios.post('http://localhost:5000/api/seller/remove', body)
+            axios.post(API_ADDRESS + '/seller/remove', body)
                 .then(res => {
                     if (res.data.success) {
                         dispatch(logoutSellerAction());
-                        alert('판매자 정보 삭제 성공');
                         history.push('/mypage');
                     } else {
-                        alert('판매자 정보 삭제 실패');
+                        alert(ALERT_MSG.failDeleteSeller);
                     }
                 });
         }
     }, []);
-    const onClickDeleteProductButton = useCallback((e) => {
+
+    const onClickDeleteProductButton = useCallback(e => {
         if (window.confirm('상품을 삭제하시겠습니까?')) {
             // 상품 삭제 function 구현
             const body = {
@@ -68,19 +68,22 @@ const MyPage = ({ history }) => {
                 number: number,
             };
 
-            axios.post('http://localhost:5000/api/product/remove', body)
+            axios.post(API_ADDRESS + '/product/remove', body)
                 .then(res => {
                     if (res.data.success) {
                         product = res.data.product;
                         dispatch(registerSellerAction({ number, name, product }));
-                        alert('상품 삭제 성공');
                         history.push('/mypage');
                     } else {
-                        alert('상품 삭제 실패');
+                        alert(ALERT_MSG.failDeleteProduct);
                     }
                 })
         }
     }, []);
+
+    const infoStyle = useMemo(() => ({
+        marginRight: '5px',
+    }), []);
 
     return (
         <center>
@@ -89,8 +92,8 @@ const MyPage = ({ history }) => {
             {isLoggedIn && 
                 <div>
                     <h2>내 정보</h2>
-                    <div><b style={{ marginRight: '5px' }}>이메일</b>|| {me.email}</div>
-                    <div><b style={{ marginRight: '5px' }}>이름</b>|| {me.name}</div>
+                    <div><b style={infoStyle}>이메일</b>|| {me.email}</div>
+                    <div><b style={infoStyle}>이름</b>|| {me.name}</div>
                     <Button onClick={onClickLogoutButton}>로그아웃</Button>
                     <Button type="primary" danger onClick={onClickRemoveUserButton}>탈퇴</Button>
                     <br />
@@ -100,14 +103,19 @@ const MyPage = ({ history }) => {
             }
             
             {/* 판매자 등록 -> 아직 판매자로 등록되어 있지 않은 경우 */}
-            {!number && <Button onClick={() => history.push('/registerSeller')}>판매자 등록</Button>}
+            {
+                !number &&
+                <Button onClick={() => history.push('/registerSeller')}>
+                    판매자 등록
+                </Button>
+            }
             
             {/* 판매자 정보 -> 판매자로 등록되어 있을 경우 */}
             {number && 
                 <div>
                     <h2>판매자 정보</h2>
-                    <div><b style={{ marginRight: '5px' }}>사업자 등록 번호</b>|| {number}</div>
-                    <div><b style={{ marginRight: '5px' }}>상호명</b>|| {name}</div>
+                    <div><b style={infoStyle}>사업자 등록 번호</b>|| {number}</div>
+                    <div><b style={infoStyle}>상호명</b>|| {name}</div>
                     <table>
                         <thead>
                             <tr>

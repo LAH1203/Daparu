@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from "react-redux";
-
+import axios from 'axios';
 import { Card, Button, Modal, Input } from 'antd';
 import { ArrowRightOutlined } from '@ant-design/icons';
-import axios from 'axios';
+
+import { ALERT_MSG, API_ADDRESS } from '../../utils/constants';
 
 const { TextArea } = Input;
 
@@ -24,7 +25,7 @@ const QnAPage = ({ history, match }) => {
             productId: productId,
         };
 
-        axios.post('http://localhost:5000/api/qna', body)
+        axios.post(API_ADDRESS + '/qna', body)
             .then(res => {
                 if (res.data.success) {
                     if (res.data.qnas) {
@@ -54,8 +55,9 @@ const QnAPage = ({ history, match }) => {
     };
 
     const handleOk = () => {
+        const { wrongQna, failWriteQna } = ALERT_MSG;
         if (!writingTitle || !writingContent) {
-            return alert('제목과 내용을 모두 입력해주세요');
+            return alert(wrongQna);
         }
 
         const body = {
@@ -66,15 +68,13 @@ const QnAPage = ({ history, match }) => {
             date: new Date(),
         };
 
-        // 백엔드로 작성된 내용 보내기
-        axios.post('http://localhost:5000/api/qna/writing', body)
+        axios.post(API_ADDRESS + '/qna/writing', body)
             .then(res => {
                 if (res.data.success) {
-                    console.log('작성 성공');
                     setWritingTitle("");
                     setWritingContent("");
                 } else {
-                    return alert('작성 실패');
+                    return alert(failWriteQna);
                 }
             });
 
@@ -86,17 +86,16 @@ const QnAPage = ({ history, match }) => {
         setIsModalVisible(false);
     };
 
-    const onChangeWritingTitle = (e) => {
+    const onChangeWritingTitle = e => {
         setWritingTitle(e.target.value);
     };
 
-    const onChangeWritingContent = (e) => {
+    const onChangeWritingContent = e => {
         setWritingContent(e.target.value);
     };
 
     const onClickWritingButton = () => {
         if (!me) {
-            alert('로그인부터 하셔야 합니다');
             history.push('/signin');
         } else {
             showModal();

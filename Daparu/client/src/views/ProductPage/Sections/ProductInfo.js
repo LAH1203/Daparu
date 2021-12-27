@@ -1,13 +1,7 @@
-import React from 'react'
-import { Descriptions } from 'antd'
+import React from 'react';
+import { Descriptions } from 'antd';
 
-
-function ProductInfo({detail}) {
- 
-  //상품 아이디, 개수, 상품 정보를 카트에 넣어준다
-
-  
-
+const ProductInfo = ({ detail }) => {
   return (
     <div>
       <Descriptions title="상품정보">
@@ -18,11 +12,7 @@ function ProductInfo({detail}) {
       <br />
       <br />
     </div>
+  );
+};
 
-
-
-  )
-}
-
-export default ProductInfo
-
+export default ProductInfo;

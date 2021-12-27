@@ -1,37 +1,38 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import FileUpload from '../../utils/FileUpload';
 import axios from 'axios';
-import { Button, Input } from 'antd'
+import { Button, Input } from 'antd';
+
+import FileUpload from '../../utils/FileUpload';
+import { ALERT_MSG, API_ADDRESS } from '../../utils/constants';
 
 const { TextArea } = Input;
 
-function ReviewUpload({ detail, history }) {
-
+const ReviewUpload = ({ detail }) => {
   const { me } = useSelector(state => state.user);
 
-  const [Review, setReview] = useState("")
-  const [Star, setStar] = useState(0)
-  const [Images, setImages] = useState([])
+  const [Review, setReview] = useState("");
+  const [Star, setStar] = useState(0);
+  const [Images, setImages] = useState([]);
 
- 
-  const reviewChangeHandler = (event) => {
-    setReview(event.currentTarget.value)
-  }
+  const reviewChangeHandler = event => {
+    setReview(event.currentTarget.value);
+  };
 
-  const starChangeHandler = (event) => {
-    setStar(event.currentTarget.value)
-  }
+  const starChangeHandler = event => {
+    setStar(event.currentTarget.value);
+  };
 
-  const updateImages = (newImages) => {
-    setImages(newImages)
-  }
+  const updateImages = newImages => {
+    setImages(newImages);
+  };
 
-  const submitHandler = (event) => {
+  const submitHandler = event => {
     event.preventDefault();
+    const { wrongReview, failWriteReview } = ALERT_MSG;
 
     if (!Review) {
-      return alert("내용을 넣어주셔야 합니다.")
+      return alert(wrongReview);
     }
 
     const body = {
@@ -40,23 +41,18 @@ function ReviewUpload({ detail, history }) {
       review: Review,
       images: Images,
       star: Star,
-    }
+    };
 
-
-
-    axios.post('http://localhost:5000/api/product/review', body)
+    axios.post(API_ADDRESS + '/product/review', body)
       .then(response => {
-        
         if (response.data.success) {
-          alert('리뷰등록')
-          setImages([])
-          setReview('')
+          setImages([]);
+          setReview('');
         } else {
-          alert('리뷰등록 실패')
+          alert(failWriteReview);
         }
-      })
+      });
   }
-
 
   return (
     <div>
@@ -75,7 +71,7 @@ function ReviewUpload({ detail, history }) {
         </Button>
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default ReviewUpload
+export default ReviewUpload;
