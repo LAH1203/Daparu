@@ -12,6 +12,7 @@ const ALERT_MSG = {
   wrongReview: '내용을 입력해주세요.',
   wrongSellerNumber: '사업자 등록 번호를 제대로 입력해주세요.',
   wrongSellerName: '상호명을 입력해주세요.',
+  wrongPurchaseItems: '구매할 상품을 선택해주세요.',
   needEveryValue: '모든 값을 넣어주셔야 합니다.',
   successBuy: '상품 구매에 성공하였습니다.',
   successAddCart: '장바구니에 상품이 추가되었습니다. 장바구니로 이동하시겠습니까?',
@@ -26,6 +27,9 @@ const ALERT_MSG = {
   failDeleteProduct: '상품 삭제에 실패하였습니다.',
   failWriteQna: 'Q&A 작성에 실패하였습니다.',
   failWriteReview: '리뷰 작성에 실패하였습니다.',
+  failGetPurchaseHistory: '구매 내역을 가져오는데 실패하였습니다.',
+  failGetCart: '장바구니 정보를 가져오는데 실패하였습니다.',
+  failDeleteCartProduct: '해당 상품을 삭제하는데 실패하였습니다.',
 };
 
 const API_ADDRESS = 'http://localhost:5000/api';

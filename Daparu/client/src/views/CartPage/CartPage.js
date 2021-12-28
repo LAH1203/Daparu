@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
-
 import { Button, Checkbox } from "antd";
 import { CloseOutlined } from '@ant-design/icons';
+
+import PaymentPage from "../PaymentPage/PaymentPage";
+import { ALERT_MSG, API_ADDRESS } from "../../utils/constants";
 import Logo from '../Logo';
 import './cartTable.css';
-import PaymentPage from "../PaymentPage/PaymentPage";
 
 const CartPage = ({ history }) => {
     const [cartItems, setCartItems] = useState([]);
     const [total, setTotal] = useState(0);
-    const [ShowPay, setShowPay] = useState(false)
+    const [ShowPay, setShowPay] = useState(false);
     const [checkedItems, setcheckedItems] = useState([]);
 
     const { me } = useSelector(state => state.user);
@@ -25,12 +26,11 @@ const CartPage = ({ history }) => {
             email: me.email,
         };
 
-        axios.post('http://localhost:5000/api/cart', body)
+        axios.post(API_ADDRESS + '/cart', body)
             .then(res => {
                 if (res.data.success) {
                     setCartItems(res.data.cart);
                     setcheckedItems(res.data.cart);
-                    console.log(res.data.cart);
                     let newTotal = 0;
                     for (let i = 0; i < res.data.cart.length; i++) {
                         const price = res.data.cart[i].productInfo.price * res.data.cart[i].quantity;
@@ -38,41 +38,39 @@ const CartPage = ({ history }) => {
                     }
                     setTotal(newTotal);
                 } else {
-                    alert('장바구니 정보를 가져오는데 실패하였습니다.');
+                    alert(ALERT_MSG.failGetCart);
                 }
             });
     }
 
-    const deleteItemFunction = (e) => {
+    const deleteItemFunction = e => {
         if (window.confirm('해당 상품을 삭제하시겠습니까?')) {
-            console.log(e.target.value);
             const body = {
                 id: e.target.value,
                 email: me.email,
             };
 
-            axios.post('http://localhost:5000/api/cart/delete', body)
+            axios.post(API_ADDRESS + '/cart/delete', body)
                 .then(res => {
                     if (res.data.success) {
-                        alert('삭제 성공');
                         getCart();
                     } else {
-                        alert('삭제 실패');
+                        alert(ALERT_MSG.failDeleteCartProduct);
                     }
                 });
         }
     };
 
-    const onChangeFunction = (e) => {
+    const onChangeFunction = e => {
         const product = e.target.value;
         const price = product.productInfo.price * product.quantity;
 
         if (e.target.checked) {
             setTotal(total + price);
-            setcheckedItems([...checkedItems, product])
+            setcheckedItems([...checkedItems, product]);
         } else {
             setTotal(total - price);
-            setcheckedItems(checkedItems.filter(items => items.id !== product.productInfo._id))
+            setcheckedItems(checkedItems.filter(items => items.id !== product.productInfo._id));
         }
 
 
@@ -80,14 +78,10 @@ const CartPage = ({ history }) => {
 
     const onClickPaymentButton = () => {
         if (total <= 0) {
-            return alert('구매할 상품을 선택해주세요!');
+            return alert(ALERT_MSG.wrongPurchaseItems);
+        } else {
+            setShowPay(true);
         }
-
-        else {
-            setShowPay(true)
-        }
-
-  
     };
 
     return (

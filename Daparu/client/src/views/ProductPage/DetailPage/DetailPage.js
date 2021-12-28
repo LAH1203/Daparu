@@ -15,7 +15,7 @@ import { ALERT_MSG, API_ADDRESS } from '../../../utils/constants';
 //상품 id에 따른 기본적인 설명 레이아웃 만들기
 //sections에서 상세 설명 만들고 불러오기(상품 이미지, 상품 설명)
 //별점은 평균값을 상품 기본 설명에 추가할 것
-const DetailPage = (match, history) => {
+const DetailPage = ({ match, history }) => {
   const productId = match.params.productId;
   const [Product, setProduct] = useState({});
   const { number } = useSelector(state => state.seller);

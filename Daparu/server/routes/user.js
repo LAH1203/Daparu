@@ -4,6 +4,7 @@ const { User } = require('../models/User');
 const { Seller } = require('../models/Seller');
 const { Product } = require('../models/Product');
 const { Cart } = require('../models/Cart');
+const { Payment } = require('../models/Payment');
 
 // Sign In
 router.post('/signin', (req, res) => {
@@ -117,5 +118,16 @@ router.post('/remove', (req, res) => {
     });
 });
 
+// Get Purchase History
+router.post('/get/purchasehistory', (req, res) => {
+    const { email } = req.body;
+
+    Payment.find({ user: email }, (err, history) => {
+        if (err) {
+            return res.json({ success: false, err });
+        }
+        return res.json({ success: true, history });
+    });
+});
 
 module.exports = router;

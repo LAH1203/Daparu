@@ -37,8 +37,6 @@ const MainPage = ({ history }) => {
     }, [searchText, category]);
 
     const getProducts = body => {
-        console.log('getProducts 실행');
-
         axios.post(API_ADDRESS + '/product/products', body)
             .then(res => {
                 if (res.data.success) {
