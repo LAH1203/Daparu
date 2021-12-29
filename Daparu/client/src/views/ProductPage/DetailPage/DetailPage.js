@@ -64,7 +64,9 @@ const DetailPage = ({ match, history }) => {
 
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         {/*카트 버튼 */}
-        <Button onClick={clickHandler}>Add to Cart</Button>
+        {Product.stock ? <Button onClick={clickHandler}>Add to Cart</Button>
+        : <Button>품절</Button>}
+        
 
         {/*수정/삭제 버튼 */}
         {
@@ -84,12 +86,6 @@ const DetailPage = ({ match, history }) => {
       <br />
       <label>리뷰 게시판</label>
       <ReviewTablePage />
-
-      {/*리뷰 작성란 */}
-      <br />
-      <br />
-      <label>리뷰 작성란</label>
-      <ReviewUpload detail={Product} />
 
       {/*QnA 게시판 = 판매자 문의 정보란 */}
       <Button onClick={() => {history.push(`/qna/${productId}`)}}>

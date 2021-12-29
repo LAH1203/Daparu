@@ -24,7 +24,7 @@ function PaymentPage({ total, cartDetail }) {
   const [Zonecode, setZonecode] = useState(''); // 우편번호
   const [Number, setNumber] = useState(''); // 전화번호
 
-  const { me } = useSelector(state => state.user);
+  const { me, isLoggedIn } = useSelector(state => state.user);
 
   const onChangeName = useCallback(e => {
     setName(e.target.value);
@@ -138,7 +138,7 @@ function PaymentPage({ total, cartDetail }) {
         {Boolean(total) && <Paypal
           total={total}
         />}
-        <Button htmlType="submit">
+        <Button htmlType="submit" >
           구매
         </Button>
       </form>
