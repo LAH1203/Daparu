@@ -7,6 +7,7 @@ import RegisterSellerPage from './views/RegisterSellerPage/RegisterSellerPage';
 import UploadPage from './views/UploadPage/UploadPage';
 import DetailPage from './views/ProductPage/DetailPage/DetailPage';
 import ReviewTablePage from './views/ReviewPage/ReviewTablePage';
+import ReviewUpload from './views/ReviewPage/ReviewUpload';
 import CartPage from './views/CartPage/CartPage';
 import QnAPage from './views/QnAPage/QnAPage';
 import './App.css';
@@ -32,6 +33,7 @@ function App() {
           <Route path='/cart' exact component={CartPage} />
           <Route path='/uploads/:productId' exact component={UploadPage} />
           <Route path='/qna/:productId' exact component={QnAPage} />
+          <Route path='/review/:productId/new' exact component={ReviewUpload} />
         </Switch>
       </Router>
     </Provider>
