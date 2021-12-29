@@ -3,11 +3,11 @@ import { Descriptions } from 'antd';
 
 const ProductInfo = ({ detail }) => {
   return (
-    <div>
+    <div style={{ width: '50%' }}>
       <Descriptions title="상품정보">
-        <Descriptions.Item label="Price">{detail.price}</Descriptions.Item>
-        <Descriptions.Item label="Sold">{detail.sold}</Descriptions.Item>
-        <Descriptions.Item label="Stock">{detail.stock}</Descriptions.Item>
+        <Descriptions.Item label="가격">{detail.price} 원</Descriptions.Item>
+        <Descriptions.Item label="판매량">{detail.sold} 개</Descriptions.Item>
+        <Descriptions.Item label="재고">{detail.stock} 개</Descriptions.Item>
       </Descriptions>
       <br />
       <br />

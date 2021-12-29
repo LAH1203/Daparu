@@ -165,8 +165,8 @@ router.post('/products', (req, res) => {
     Product.find({ _id: { $in: productIds } })
       .exec((err, productInfo) => {
         //console.log(productInfo)
-        if (err) return res.status(400).send({ success: false, err })
-        return res.status(200).send({ productInfo })
+        if (err) return res.json({ success: false, err })
+        return res.json({ success: true, productInfo })
       })
   })
 });

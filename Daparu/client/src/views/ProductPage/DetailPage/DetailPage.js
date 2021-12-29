@@ -4,8 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button, Row, Col } from 'antd';
 
 import Logo from '../../Logo';
-import { addToCart } from '../../../reducers/user'
-import ProductImage from '../Sections/ProductImage';
+import { addToCart } from '../../../reducers/user';
 import ProductInfo from '../Sections/ProductInfo';
 import ReviewTablePage from '../../ReviewPage/ReviewTablePage';
 import onClickDeleteProductButton from '../../MyPage/MyPage';
@@ -22,12 +21,25 @@ const DetailPage = ({ match, history }) => {
   const { isLoggedIn, me } = useSelector(state => state.user);
   const dispatch = useDispatch();
 
+  const setImages = images => {
+    const imageSection = document.getElementById('image');
+    imageSection.innerHTML = '';
+
+    images.map(image => {
+      imageSection.innerHTML += `<img src='data:image/png;base64,${image}'} />`;
+    });
+  };
+
   useEffect(() => {
     axios.get(`${API_ADDRESS}/product/products_by_id?id=${productId}&type=single`)
       .then(response => {
-        setProduct(response.data.productInfo[0]);
-      })
-      .catch(err => alert(err));
+        if (response.data.success) {
+          setProduct(response.data.productInfo[0]);
+          setImages(response.data.productInfo[0].images);
+        } else {
+          alert(response.data.err);
+        }
+      });
   }, []);
 
   const clickHandler = () => {
@@ -39,8 +51,11 @@ const DetailPage = ({ match, history }) => {
       email: me.email,
       productId: productId,
     };
+
     dispatch(addToCart(body));
+
     let result = window.confirm(ALERT_MSG.successAddCart);
+
     if (result) {
       history.push('/cart');
     } else {
@@ -78,31 +93,28 @@ const DetailPage = ({ match, history }) => {
   }), []);
 
   return (
-    <div style={{ width: '100%', padding: '3rem 4rem' }}>
-      <div style={{ display: 'flex', justifyContent: 'left' }}>
+    <center>
+      <div>
         <Logo width="200px" />
         <h1>{Product.title}</h1>
       </div>
 
-      <Row gutter={[16, 16]}>
-        <Col lg={12} sm={24}>
-          {/*기본 설명(상품명, 가격, 재고, 총 평점) */}
-          <ProductInfo detail={Product} />
-        </Col>
-      </Row>
+      <div style={{ margin: '50px' }}></div>
 
-      <div style={{ display: 'flex', justifyContent: 'center' }}>
+      <ProductInfo detail={Product} />
+
+      <div>
         {/*카트 버튼 */}
-        {Product.stock ? <Button onClick={clickHandler}>Add to Cart</Button>
-        : <Button>품절</Button>}
+        {Product.stock ? <Button onClick={clickHandler}>Add to Cart</Button> : <Button>품절</Button>}
 
         {/*수정/삭제 버튼 */}
-        {
-          number === Product.writer && (
+        {number === Product.writer && (
             <Button onClick={() => history.push(`/uploads/${productId}`)}>수정</Button>,
             <Button value={productId} onClick={onClickDeleteProductButton}>삭제</Button>
-          )}
+        )}
       </div>
+
+      <div style={{ margin: '50px' }}></div>
 
       <div style={navStyle}>
         <b style={navButtonStyle} onClick={onClickNavImage}>상세 이미지</b>
@@ -110,23 +122,20 @@ const DetailPage = ({ match, history }) => {
         <b style={navButtonStyle} onClick={onClickNavQna}>Q&A 게시판</b>
       </div>
 
-      <center id='image'>
-        <Row lg={12} sm={24}>
-          {/*이미지 */}
-          <ProductImage detail={Product} />
-        </Row>
-      </center>
+      <div style={{ margin: '50px' }}></div>
+      
+      <section id='image'></section>
 
       {/*리뷰게시판*/}
-      <center id='review' hidden>
+      <section id='review' hidden>
         <ReviewTablePage productId={productId} />
-      </center>
+      </section>
 
       {/*QnA 게시판 = 판매자 문의 정보란 */}
-      <center id='qna' hidden>
+      <section id='qna' hidden>
         <QnAPage history={history} productId={productId} />
-      </center>
-    </div>
+      </section>
+    </center>
   );
 };
 
