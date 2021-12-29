@@ -186,7 +186,7 @@ router.post('/remove', (req, res) => {
 });
 
 //리뷰 업로드
-router.post('/review', (req, res) => {
+router.post('/review/upload', (req, res) => {
 
   const review = new Review(req.body)
 

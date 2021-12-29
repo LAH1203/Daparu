@@ -44,7 +44,7 @@ const ReviewUpload = ({ match, history }) => {
       star: Star,
     };
 
-    axios.post(API_ADDRESS + '/product/review', body)
+    axios.post(API_ADDRESS + '/review/upload', body)
       .then(response => {
         if (response.data.success) {
           history.push('/');
@@ -60,17 +60,17 @@ const ReviewUpload = ({ match, history }) => {
         <br />
         <br />
         <label>리뷰</label>
-        <div class='star-rating' onChange={starChangeHandler}>
+        <div className='star-rating' onChange={starChangeHandler}>
           <input type='radio' name='star-point' id='5-stars' value='5' />
-          <label for='5-stars' class='star'>★</label>
+          <label for='5-stars' className='star'>★</label>
           <input type='radio' name='star-point' id='4-stars' value='4' />
-          <label for='4-stars' class='star'>★</label>
+          <label for='4-stars' className='star'>★</label>
           <input type='radio' name='star-point' id='3-stars' value='3' />
-          <label for='3-stars' class='star'>★</label>
+          <label for='3-stars' className='star'>★</label>
           <input type='radio' name='star-point' id='2-stars' value='2' />
-          <label for='2-stars' class='star'>★</label>
+          <label for='2-stars' className='star'>★</label>
           <input type='radio' name='star-point' id='1-stars' value='1' />
-          <label for='1-stars' class='star'>★</label>
+          <label for='1-stars' className='star'>★</label>
         </div>
         <TextArea onChange={reviewChangeHandler} value={Review} />
         <br />

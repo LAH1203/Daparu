@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useSelector } from "react-redux";
 import axios from 'axios';
 import { Card, Button, Modal, Input } from 'antd';
@@ -8,8 +8,7 @@ import { ALERT_MSG, API_ADDRESS } from '../../utils/constants';
 
 const { TextArea } = Input;
 
-const QnAPage = ({ history, match }) => {
-    const productId = match.params.productId;
+const QnAPage = ({ history, productId }) => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [writingTitle, setWritingTitle] = useState("");
     const [writingContent, setWritingContent] = useState("");
@@ -73,6 +72,7 @@ const QnAPage = ({ history, match }) => {
                 if (res.data.success) {
                     setWritingTitle("");
                     setWritingContent("");
+                    getQnA();
                 } else {
                     return alert(failWriteQna);
                 }
@@ -102,10 +102,13 @@ const QnAPage = ({ history, match }) => {
         }
     };
 
+    const wringButtonStyle = useMemo(() => ({
+        
+    }), []);
+
     return (
         <>
-            <h1 style={{ textAlign: 'center' }}>Q&A 게시판</h1>
-            <Button onClick={onClickWritingButton}>작성</Button>
+            <Button style={wringButtonStyle} onClick={onClickWritingButton}>작성</Button>
             <Modal title="Q&A 작성" visible={isModalVisible} onOk={handleOk} onCancel={handleCancle}>
                 <Input placeholder="제목" value={writingTitle} onChange={onChangeWritingTitle} />
                 <br />

@@ -30,6 +30,7 @@ const ALERT_MSG = {
   failGetPurchaseHistory: '구매 내역을 가져오는데 실패하였습니다.',
   failGetCart: '장바구니 정보를 가져오는데 실패하였습니다.',
   failDeleteCartProduct: '해당 상품을 삭제하는데 실패하였습니다.',
+  failGetAllReviews: '리뷰를 가져오는데 실패하였습니다.',
 };
 
 const API_ADDRESS = 'http://localhost:5000/api';
