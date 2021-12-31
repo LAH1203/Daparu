@@ -11,7 +11,7 @@ import { ALERT_MSG, API_ADDRESS } from '../../utils/constants';
 
 // 페이팔 아이디 : sb-offjw6957667@personal.example.com
 // 비밀번호 : 123456789
-function PaymentPage({ total, cartDetail }) {
+function PaymentPage({ total, cartDetail, history }) {
 
   //결제api 사용하여 테스트 결제 진행
   //결제 내역 갱신
@@ -84,8 +84,10 @@ function PaymentPage({ total, cartDetail }) {
         const { successBuy, failBuy } = ALERT_MSG;
         if (response.data.success) {
           alert(successBuy);
+          history.push('/mypage')
         } else {
           alert(failBuy);
+          history.push('/')
         }
       });
   };
@@ -134,10 +136,7 @@ function PaymentPage({ total, cartDetail }) {
         </div>
         <br />
 
-        <Kakao total={total} />
-        {Boolean(total) && <Paypal
-          total={total}
-        />}
+        
         <Button htmlType="submit" >
           구매
         </Button>
@@ -145,5 +144,9 @@ function PaymentPage({ total, cartDetail }) {
     </div>
   )
 }
-
+//카카오 결제와 페이팔 : 안 예뻐서 따로 빼둠
+//<Kakao total={total} />
+  //      {Boolean(total) && <Paypal
+    //      total={total}
+      //  />}
 export default PaymentPage;

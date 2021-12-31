@@ -118,7 +118,7 @@ const CartPage = ({ history }) => {
 
             <br />
 
-            {ShowPay ? <PaymentPage total={total} cartDetail={checkedItems}/>
+            {ShowPay ? <PaymentPage total={total} cartDetail={checkedItems} history={history}/>
             : <Button onClick={onClickPaymentButton}>결제하기</Button>}
         </center>
     );

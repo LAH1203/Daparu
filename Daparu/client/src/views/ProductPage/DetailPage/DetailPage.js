@@ -46,7 +46,7 @@ const DetailPage = ({ match, history }) => {
     if (!isLoggedIn) {
       history.push('/signin');
     }
-  
+
     const body = {
       email: me.email,
       productId: productId,
@@ -105,13 +105,14 @@ const DetailPage = ({ match, history }) => {
 
       <div>
         {/*카트 버튼 */}
-        {Product.stock ? <Button onClick={clickHandler}>Add to Cart</Button> : <Button>품절</Button>}
+        {(Product.stock>0) ? <Button onClick={clickHandler}>Add to Cart</Button> : <Button>품절</Button>}
 
         {/*수정/삭제 버튼 */}
         {number === Product.writer && (
-            <Button onClick={() => history.push(`/uploads/${productId}`)}>수정</Button>,
-            <Button value={productId} onClick={onClickDeleteProductButton}>삭제</Button>
-        )}
+          <Button onClick={() => history.push(`/uploads/${productId}`)}>수정</Button>)}
+
+        {number === Product.writer && (
+          <Button value={productId} onClick={onClickDeleteProductButton}>삭제</Button>)}
       </div>
 
       <div style={{ margin: '50px' }}></div>
@@ -123,7 +124,7 @@ const DetailPage = ({ match, history }) => {
       </div>
 
       <div style={{ margin: '50px' }}></div>
-      
+
       <section id='image'></section>
 
       {/*리뷰게시판*/}
